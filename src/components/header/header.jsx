@@ -6,7 +6,7 @@ const Header = (params) => {
   return (
     <>
       <div className="header">
-        <h1>Olá, {nome}</h1>
+        <h1>{nome}</h1>
       </div>
     </>
   );
