@@ -4,6 +4,7 @@ import Header from "./components/header/header";
 import Calculadora from "./pages/calculadora/calculadora";
 import Home from "./pages/home/home";
 import Footer from "./components/footer/footer";
+import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Header nome="Tomita" />
       <BrowserRouter>
         <Routes>
+          <Route path="/login" Component={LoginUsuario} />
           <Route path="/" Component={Home} />
           <Route path="/calculadora" Component={Calculadora} />
         </Routes>
