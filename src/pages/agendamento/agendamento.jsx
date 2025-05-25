@@ -8,29 +8,54 @@ function Agendamento() {
     const [descricao, setDescricao] = useState('');
     const [mensagem, setMensagem] = useState('');
     const [agendamentos, setAgendamentos] = useState([]);
+    const [indiceEdicao, setIndiceEdicao] = useState(null); // Estado para controle de edição
 
     const handleSalvar = () => {
         if (!titulo || !data || !hora) {
-            setMensagem('Preencha todos os campos obrigatórios.');
-            return;
+            return setMensagem('Preencha todos os campos obrigatórios.');
         }
 
         const dataHoraSelecionada = new Date(`${data}T${hora}`);
-        const agora = new Date();
-        if (dataHoraSelecionada < agora) {
-            setMensagem('Não é possível agendar para uma data/hora passada.');
-            return;
+        if (dataHoraSelecionada < new Date()) {
+            return setMensagem('Não é possível agendar para uma data/hora passada.');
         }
 
         const novoAgendamento = { titulo, data, hora, descricao };
-        setAgendamentos([...agendamentos, novoAgendamento]);
-        setMensagem('Agendamento salvo com sucesso!');
 
-        // Limpa os campos
+        setAgendamentos((prev) => {
+            const novosAgendamentos = [...prev];
+            if (indiceEdicao !== null) {
+                novosAgendamentos[indiceEdicao] = novoAgendamento;
+                setMensagem('Agendamento atualizado com sucesso!');
+            } else {
+                novosAgendamentos.push(novoAgendamento);
+                setMensagem('Agendamento salvo com sucesso!');
+            }
+            return novosAgendamentos;
+        });
+
+        limparCampos();
+    };
+
+    const handleEditar = (index) => {
+        const agendamento = agendamentos[index];
+        setTitulo(agendamento.titulo);
+        setData(agendamento.data);
+        setHora(agendamento.hora);
+        setDescricao(agendamento.descricao);
+        setIndiceEdicao(index);
+    };
+
+    const limparCampos = () => {
         setTitulo('');
         setData('');
         setHora('');
         setDescricao('');
+        setIndiceEdicao(null);
+    };
+
+    const handleEditarClick = (index) => {
+        handleEditar(index);
     };
 
     return (
@@ -57,7 +82,9 @@ function Agendamento() {
                 <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} />
             </div>
 
-            <button onClick={handleSalvar}>Salvar Agendamento</button>
+            <button onClick={handleSalvar}>
+                {indiceEdicao !== null ? 'Atualizar Agendamento' : 'Salvar Agendamento'}
+            </button>
 
             {mensagem && <div className="mensagem">{mensagem}</div>}
 
@@ -66,6 +93,7 @@ function Agendamento() {
                 {agendamentos.map((ag, index) => (
                     <div key={index} className="agendamento">
                         {ag.data} {ag.hora} - <strong>{ag.titulo}</strong> {ag.descricao && `| ${ag.descricao}`}
+                        <button onClick={() => handleEditarClick(index)}>Editar</button>
                     </div>
                 ))}
             </div>
