@@ -1,3 +1,9 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-height: 100vh;
+  background: #c7c8ccea;
+}
+
 .agendamento-container {
     font-family: Arial, sans-serif;
     max-width: 600px;
