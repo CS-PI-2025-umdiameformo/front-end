@@ -20,22 +20,18 @@ function LoginUsuario() {
   };
 
   return (
-    <form onSubmit={envioLogin}>
+    <form className="formulario" onSubmit={envioLogin}>
       <input
         type="email"
         placeholder="Digite seu email"
-        onChange={(event) => {
-          setEmail(event.target.value);
-        }}
+        onChange={(event) => setEmail(event.target.value)}
       />
       <input
         type="password"
         placeholder="Digite sua senha"
-        onChange={(event) => {
-          setSenha(event.target.value);
-        }}
+        onChange={(event) => setSenha(event.target.value)}
       />
-      <label style={{ display: "block", margin: "10px 0" }}>
+      <label>
         <input
           type="checkbox"
           checked={naoSouRobo}
@@ -43,21 +39,25 @@ function LoginUsuario() {
         />
         Não sou um robô
       </label>
-      <button type="submit">Enviar</button>
-      <button
-        type="button"
-        style={{ marginLeft: "10px" }}
-        onClick={() => alert("Função de recuperação de senha ainda não implementada.")}
-      >
-        Esqueci a senha
-      </button>
-      <button
-        type="button"
-        style={{ marginLeft: "10px" }}
-        onClick={() => alert("Função de cadastro ainda não implementada.")}
-      >
-        Cadastre-se
-      </button>
+      <div className="formulario-botoes">
+        <button type="submit">Login</button>
+        <button
+          type="button"
+          onClick={() =>
+            alert("Função de recuperação de senha ainda não implementada.")
+          }
+        >
+          Esqueci a senha
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            alert("Função de cadastro ainda não implementada.")
+          }
+        >
+          Cadastre-se
+        </button>
+      </div>
     </form>
   );
 }

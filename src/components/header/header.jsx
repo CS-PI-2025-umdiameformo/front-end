@@ -5,8 +5,7 @@ const Header = (params) => {
   const { nome, idade } = params;
   return (
     <ul>
-      <li><a href="/loginUsuario">Login.</a></li>
-      <li><a href="/agendamento">Agendemento.</a></li>
+        
 
     </ul>           
   );
