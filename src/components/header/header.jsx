@@ -4,11 +4,13 @@ import "./header.css";
 const Header = (params) => {
   const { nome, idade } = params;
   return (
-    <>
-      <div className="header">
-        <h1>Olá, {nome}</h1>
-      </div>
-    </>
+    <ul>
+        
+
+    </ul>           
   );
 };
 export default Header;
+
+// Adicionar paginas nessa UL só colocar o nome da classe "/loginUsuario" por exemplo.
+

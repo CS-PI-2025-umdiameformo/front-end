@@ -17,6 +17,7 @@ function App() {
           <Route path="/" Component={Home} />
           <Route path="/calculadora" Component={Calculadora} />
           <Route path="/agendamento" element={<Agendamento />} />
+          <Route path="/loginUsuario" Component={LoginUsuario} />
         </Routes>
       </BrowserRouter>
       {/* <Calculadora /> */}
