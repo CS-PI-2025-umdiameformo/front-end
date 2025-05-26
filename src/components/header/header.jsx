@@ -12,3 +12,6 @@ const Header = (params) => {
   );
 };
 export default Header;
+
+// Adicionar paginas nessa UL só colocar o nome da classe "/loginUsuario" por exemplo.
+

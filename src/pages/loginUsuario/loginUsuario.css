@@ -1,0 +1,86 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #c7c8ccea;
+}
+
+.formulario {
+  background: #fff;
+  padding: 32px 28px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+  max-width: 350px;
+  margin: auto;
+  gap: 18px;
+}
+
+.formulario input[type="email"],
+.formulario input[type="password"] {
+  width: 100%;
+  padding: 12px 10px;
+  border: 1px solid #dcdde1;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f9f9f9;
+  transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+  margin-bottom: 8px;
+}
+
+.formulario input[type="email"]:focus,
+.formulario input[type="password"]:focus {
+  border: 2px solid #4078c0;
+  outline: none;
+  background: #fff;
+}
+
+.formulario label {
+  font-size: 0.98rem;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formulario button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #4078c0;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.formulario button[type="button"] {
+  background: #e1e7ef;
+  color: #4078c0;
+  margin-left: 0;
+}
+
+.formulario button:hover {
+  background: #305a8c;
+}
+
+.formulario button[type="button"]:hover {
+  background: #d6deeb;
+  transition: background 0.2s;
+}
+
+.formulario-botoes {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 8px;
+}
