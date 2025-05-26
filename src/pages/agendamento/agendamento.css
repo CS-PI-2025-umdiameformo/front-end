@@ -1,0 +1,44 @@
+.agendamento-container {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.mensagem {
+    margin-top: 10px;
+    color: green;
+}
+
+.lista-agendamentos {
+    margin-top: 20px;
+}
+
+.agendamento {
+    background-color: #f2f2f2;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 4px;
+}
