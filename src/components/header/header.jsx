@@ -4,10 +4,11 @@ import "./header.css";
 const Header = (params) => {
   const { nome, idade } = params;
   return (
-    <ul>
-        
-
-    </ul>           
+    <>
+      <div className="header">
+        <h1>{nome}</h1>
+      </div>
+    </>
   );
 };
 export default Header;
