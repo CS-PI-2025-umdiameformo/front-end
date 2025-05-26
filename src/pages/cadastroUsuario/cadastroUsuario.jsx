@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'; // Importa useEffect
 import './cadastroUsuario.css';
 
-const LOCAL_STORAGE_KEY = 'userRegistrationFormData';
+const LOCAL_STORAGE_KEY = 'userLastRegistrationFormData';
 
 /**
  * @function UserRegistrationPage
@@ -116,6 +116,33 @@ function UserRegistrationPage() {
   };
 
   /**
+   * @function saveFormDataLocalStorage
+   * @description Salva os dados do formulário no localStorage.
+   * @param {object} form - O estado atual do formulário.
+   * @returns {void}
+   * @throws {Error} - Se ocorrer um erro ao salvar os dados no localStorage.
+   * */
+  function saveFormDataLocalStorage(form) {
+    try {  
+      const dadosJSON = JSON.parse(form);
+      // Função auxiliar para obter a chave do localStorage
+      localStorage.setItem(getFormKey(), dadosJSON);
+    } catch (error) {
+      console.error("Erro ao salvar o formulário no Local Storage:", error);
+      return null;
+    }
+  }
+
+  /**
+   * @function getFormKey
+   * @description Gera uma chave única para o localStorage usando UUID.
+   * @return {string} - Uma chave única para o localStorage.
+   * */
+  const getFormKey = () => {
+    return crypto.randomUUID();
+  }
+
+  /**
    * @function handleSubmit
    * @description Lida com a submissão do formulário.
    * Valida os dados e, se válidos, simula o envio dos dados e limpa o localStorage.
@@ -128,12 +155,14 @@ function UserRegistrationPage() {
       console.log('Dados do formulário enviados:', formData);
       setErrors({});
       setIsSubmitted(true);
+      localStorage.setItem("debug", JSON.parse(formData));
+      //saveFormDataLocalStorage(formData); // debug
       alert('Usuário cadastrado com sucesso! (Simulação)');
 
       // Limpar o formulário e o localStorage após o envio
-      //localStorage.removeItem(LOCAL_STORAGE_KEY);
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+
       
-      //localStorage.setItem("debug", JSON.parse(formData));
 
       setFormData({
         name: '',
