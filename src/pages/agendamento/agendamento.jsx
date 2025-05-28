@@ -8,7 +8,11 @@ function Agendamento() {
     const [descricao, setDescricao] = useState('');
     const [mensagem, setMensagem] = useState('');
     const [agendamentos, setAgendamentos] = useState([]);
-    const [indiceEdicao, setIndiceEdicao] = useState(null); // Estado para controle de edição
+    const [indiceEdicao, setIndiceEdicao] = useState(null); 
+    const [recorrencia, setRecorrencia] = useState('');
+    const [quantidadeRecorrencias, setQuantidadeRecorrencias ] = useState(1);
+    const [diasSelecionados, setDiasSelecionados] = useState([]);
+    
 
     const handleSalvar = () => {
         if (!titulo || !data || !hora) {
@@ -20,16 +24,52 @@ function Agendamento() {
             return setMensagem('Não é possível agendar para uma data/hora passada.');
         }
 
-        const novoAgendamento = { titulo, data, hora, descricao };
+        let novoAgendamento = [];
+
+        if (recorrenciaTipo == 'Semanal') {
+            for (let i = 0; i< quantidadeRecorrencias; i++) {
+                const novaData = new Date (dataHoraSelecionada);
+                novaData.setDate(novaData.getDate() + i * 7);
+                novosAgendamentos.push({
+                    titulo,
+                    data: novaData.toISOString().split('T')[0],
+                    hora,
+                    descricao,
+                });
+            }
+        }   else if (recorrenciaTipo == 'diasDaSemana') {
+            let count = 0;
+            let gerados = 0;
+            while (gerados < quantidadeRecorrencias) {
+                const novaData = new Date (dataHoraSelecionada);
+                novaData.setDate(novaData.getDate() + count);
+                if (diasSelecionados.includes(novaData.getDay())) {
+                    novosAgendamentos.push({
+                        titulo,
+                        data: novaData.toISOString().split('T')[0],
+                        hora,
+                        descricao,
+                    });
+                    gerados++;
+                }
+                count++
+            }
+        } else {
+            novosAgendamentos.push({titulo, data, hora, descricao});
+        }
 
         setAgendamentos((prev) => {
             const novosAgendamentos = [...prev];
             if (indiceEdicao !== null) {
-                novosAgendamentos[indiceEdicao] = novoAgendamento;
+                novosAgendamentos[indiceEdicao] = novoAgendamento[0];
                 setMensagem('Agendamento atualizado com sucesso!');
             } else {
                 novosAgendamentos.push(novoAgendamento);
-                setMensagem('Agendamento salvo com sucesso!');
+                setMensagem(
+                    recorrenciaTipo
+                        ? `Criado ${novosAgendamentos.length} agendamentos com sucesso!`
+                        : 'Agendamento salvo com sucesso!'
+                );
             }
             return novosAgendamentos;
         });
@@ -52,7 +92,11 @@ function Agendamento() {
         setHora('');
         setDescricao('');
         setIndiceEdicao(null);
+        setRecorrenciaTipo('');
+        setQuantidadeRecorrencias(1);
+        setDiasSelecionados([]);
     };
+
 
     const handleEditarClick = (index) => {
         handleEditar(index);
