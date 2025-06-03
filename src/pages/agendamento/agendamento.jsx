@@ -8,7 +8,7 @@ function Agendamento() {
     const [descricao, setDescricao] = useState('');
     const [mensagem, setMensagem] = useState('');
     const [agendamentos, setAgendamentos] = useState([]);
-    const [indiceEdicao, setIndiceEdicao] = useState(null); // Estado para controle de edição
+    const [indiceEdicao, setIndiceEdicao] = useState(null);
 
     const handleSalvar = () => {
         if (!titulo || !data || !hora) {
@@ -44,6 +44,11 @@ function Agendamento() {
         setHora(agendamento.hora);
         setDescricao(agendamento.descricao);
         setIndiceEdicao(index);
+    };
+
+    const handleExcluir = (index) => {
+        setAgendamentos((prev) => prev.filter((_, i) => i !== index));
+        setMensagem('Agendamento excluído com sucesso!');
     };
 
     const limparCampos = () => {
@@ -94,6 +99,7 @@ function Agendamento() {
                     <div key={index} className="agendamento">
                         {ag.data} {ag.hora} - <strong>{ag.titulo}</strong> {ag.descricao && `| ${ag.descricao}`}
                         <button onClick={() => handleEditarClick(index)}>Editar</button>
+                        <button onClick={() => handleExcluir(index)}>Excluir</button>
                     </div>
                 ))}
             </div>
