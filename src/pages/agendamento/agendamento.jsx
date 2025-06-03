@@ -8,10 +8,16 @@ function Agendamento() {
     const [descricao, setDescricao] = useState('');
     const [mensagem, setMensagem] = useState('');
     const [agendamentos, setAgendamentos] = useState([]);
-    const [indiceEdicao, setIndiceEdicao] = useState(null); 
+
+    const [indiceEdicao, setIndiceEdicao] = useState(null);
+    const [popupVisivel, setPopupVisivel] = useState(false); // Controla a visibilidade do Popup
+    const [indiceExcluir, setIndiceExcluir] = useState(null); // Armazena o índice do agendamento a ser excluído
+
+
     const [recorrencia, setRecorrencia] = useState('');
     const [quantidadeRecorrencias, setQuantidadeRecorrencias] = useState(1);
     const [diasSelecionados, setDiasSelecionados] = useState([]);
+
 
     const handleSalvar = () => {
         if (!titulo || !data || !hora) {
@@ -85,6 +91,24 @@ function Agendamento() {
         });
 
         limparCampos();
+    };
+
+
+
+    const handleExcluir = () => {
+        setAgendamentos((prev) => prev.filter((_, i) => i !== indiceExcluir));
+        setMensagem('Agendamento excluído com sucesso!');
+        setPopupVisivel(false); // Fecha o Popup após a exclusão
+    };
+
+    const abrirPopupExcluir = (index) => {
+        setIndiceExcluir(index);
+        setPopupVisivel(true); // Exibe o Popup
+    };
+
+    const cancelarExcluir = () => {
+        setIndiceExcluir(null);
+        setPopupVisivel(false); // Fecha o Popup sem excluir
     };
 
     const limparCampos = () => {
@@ -193,10 +217,25 @@ function Agendamento() {
                 {agendamentos.map((ag, index) => (
                     <div key={index} className="agendamento">
                         {ag.data} {ag.hora} - <strong>{ag.titulo}</strong> {ag.descricao && `| ${ag.descricao}`}
+
+                        <button onClick={() => abrirPopupExcluir(index)}>Excluir</button>
+
                         <button onClick={() => handleEditar(index)}>Editar</button>
+
                     </div>
                 ))}
             </div>
+
+            {/* Popup de confirmação */}
+            {popupVisivel && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <p>Tem certeza de que deseja excluir este agendamento?</p>
+                        <button onClick={handleExcluir}>Confirmar</button>
+                        <button onClick={cancelarExcluir}>Cancelar</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
