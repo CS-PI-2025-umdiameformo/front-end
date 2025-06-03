@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import "./loginUsuario.css";
 
 function LoginUsuario() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [naoSouRobo, setNaoSouRobo] = useState(false);
+  const navigate = useNavigate(); 
 
   const envioLogin = (event) => {
     event.preventDefault();
@@ -16,7 +18,10 @@ function LoginUsuario() {
       alert("Por favor, confirme que você não é um robô.");
       return;
     }
+
+    // Simula um login bem-sucedido
     alert("Login realizado com sucesso!");
+    navigate("/agendamento"); // Redireciona para a página de agendamento
   };
 
   return (
@@ -51,9 +56,7 @@ function LoginUsuario() {
         </button>
         <button
           type="button"
-          onClick={() =>
-            alert("Função de cadastro ainda não implementada.")
-          }
+          onClick={() => navigate("/cadastroUsuario")} 
         >
           Cadastre-se
         </button>
@@ -61,4 +64,5 @@ function LoginUsuario() {
     </form>
   );
 }
+
 export default LoginUsuario;
