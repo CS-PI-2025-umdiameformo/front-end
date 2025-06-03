@@ -152,27 +152,24 @@ function UserRegistrationPage() {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-      console.log('Dados do formulário enviados:', formData);
-      setErrors({});
-      setIsSubmitted(true);
-      localStorage.setItem("debug", JSON.parse(formData));
-      //saveFormDataLocalStorage(formData); // debug
-      alert('Usuário cadastrado com sucesso! (Simulação)');
+        console.log('Dados do formulário enviados:', formData);
+        setErrors({});
+        setIsSubmitted(true);
+        localStorage.setItem("debug", JSON.stringify(formData)); // Corrigido aqui
+        alert('Usuário cadastrado com sucesso! (Simulação)');
 
-      // Limpar o formulário e o localStorage após o envio
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
+        // Limpar o formulário e o localStorage após o envio
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
 
-      
-
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
+        setFormData({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        });
     } else {
-      setErrors(formErrors);
-      setIsSubmitted(false);
+        setErrors(formErrors);
+        setIsSubmitted(false);
     }
   };
 
