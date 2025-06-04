@@ -4,7 +4,7 @@ import "./footer.css";
 const Footer = () => {
   return (
     <div className="footer">
-      <h1>@todos os direitos autorais</h1>
+      <h1>@UDMF</h1>
     </div>
   );
 };
