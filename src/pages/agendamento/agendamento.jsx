@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // Importa o CSS do calendário
+import 'react-calendar/dist/Calendar.css';
 import './agendamento.css';
 
 function Agendamento() {
@@ -20,16 +20,22 @@ function Agendamento() {
             return;
         }
 
+        const dataAtual = new Date();
+        const dataSelecionada = new Date(`${data}T${hora}`);
+
+        if (dataSelecionada < dataAtual) {
+            setMensagem('Não é possível criar compromissos em datas ou horários que já passaram.');
+            return;
+        }
+
         const novoAgendamento = { titulo, data, hora, descricao };
 
         if (indiceEdicao !== null) {
-            // Atualiza o agendamento existente
             const agendamentosAtualizados = [...agendamentos];
             agendamentosAtualizados[indiceEdicao] = novoAgendamento;
             setAgendamentos(agendamentosAtualizados);
             setMensagem('Agendamento atualizado com sucesso!');
         } else {
-            // Adiciona um novo agendamento
             setAgendamentos((prev) => [...prev, novoAgendamento]);
             setMensagem('Agendamento salvo com sucesso!');
         }
@@ -71,7 +77,7 @@ function Agendamento() {
     };
 
     const handleDataSelecionada = (date) => {
-        const dataFormatada = date.toISOString().split('T')[0]; // Formata a data para yyyy-MM-dd
+        const dataFormatada = date.toISOString().split('T')[0];
         setData(dataFormatada);
     };
 
