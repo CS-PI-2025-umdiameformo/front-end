@@ -14,12 +14,24 @@ function Agendamento() {
 
     const handleSalvar = () => {
         if (!titulo || !data || !hora) {
-            return setMensagem('Preencha todos os campos obrigatórios.');
+            setMensagem('Preencha todos os campos obrigatórios com (*).');
+            return;
         }
 
         const novoAgendamento = { titulo, data, hora, descricao };
-        setAgendamentos((prev) => [...prev, novoAgendamento]);
-        setMensagem('Agendamento salvo com sucesso!');
+
+        if (indiceEdicao !== null) {
+            // Atualiza o agendamento existente
+            const agendamentosAtualizados = [...agendamentos];
+            agendamentosAtualizados[indiceEdicao] = novoAgendamento;
+            setAgendamentos(agendamentosAtualizados);
+            setMensagem('Agendamento atualizado com sucesso!');
+        } else {
+            // Adiciona um novo agendamento
+            setAgendamentos((prev) => [...prev, novoAgendamento]);
+            setMensagem('Agendamento salvo com sucesso!');
+        }
+
         limparCampos();
     };
 
@@ -59,48 +71,60 @@ function Agendamento() {
     return (
         <>
             <h2>Agendar Compromisso</h2>
-
-            <div className="form-group">
-                <label>Título *</label>
-                <input type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-            </div>
-
-            <div className="form-group">
-                <label>Data *</label>
-                <input type="date" value={data} onChange={(e) => setData(e.target.value)} />
-            </div>
-
-            <div className="form-group">
-                <label>Hora *</label>
-                <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} />
-            </div>
-
-            <div className="form-group">
-                <label>Descrição (opcional)</label>
-                <textarea value={descricao} onChange={(e) => setDescricao(e.target.value)} />
-            </div>
-
-            <button onClick={handleSalvar}>
-                {indiceEdicao !== null ? 'Atualizar Agendamento' : 'Salvar Agendamento'}
-            </button>
-
-            {mensagem && <div className="mensagem">{mensagem}</div>}
-
-            <h3>Agendamentos</h3>
-            <div className="lista-agendamentos">
-                {agendamentos.map((ag, index) => (
-                    <div key={index} className="agendamento">
-                        <div className="agendamento-info">
-                            <p><strong>{ag.titulo}</strong></p>
-                            <p>{ag.data} {ag.hora}</p>
-                            {ag.descricao && <p>{ag.descricao}</p>}
-                        </div>
-                        <div className="agendamento-acoes">
-                            <button onClick={() => abrirPopupExcluir(index)}>Excluir</button>
-                            <button onClick={() => handleEditar(index)}>Editar</button>
-                        </div>
+            <div className="container">
+                <div className="teste">
+                    <div className="form-group">
+                        <label>Título *</label>
+                        <input
+                            type="text"
+                            value={titulo}
+                            onChange={(e) => setTitulo(e.target.value)}
+                        />
                     </div>
-                ))}
+                    <div className="form-group">
+                        <label>Data *</label>
+                        <input
+                            type="date"
+                            value={data}
+                            onChange={(e) => setData(e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Hora *</label>
+                        <input
+                            type="time"
+                            value={hora}
+                            onChange={(e) => setHora(e.target.value)}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Descrição (opcional)</label>
+                        <textarea
+                            value={descricao}
+                            onChange={(e) => setDescricao(e.target.value)}
+                        />
+                    </div>
+                    <button onClick={handleSalvar}>
+                        {indiceEdicao !== null ? 'Atualizar Agendamento' : 'Salvar Agendamento'}
+                    </button>
+                    {mensagem && <div className="mensagem">{mensagem}</div>}
+                    <h3>Agendamentos</h3>
+                    <div className="lista-agendamentos">
+                        {agendamentos.map((ag, index) => (
+                            <div key={index} className="agendamento">
+                                <div className="agendamento-info">
+                                    <p><strong>{ag.titulo}</strong></p>
+                                    <p>{ag.data} {ag.hora}</p>
+                                    {ag.descricao && <p>{ag.descricao}</p>}
+                                </div>
+                                <div className="agendamento-acoes">
+                                    <button onClick={() => abrirPopupExcluir(index)}>Excluir</button>
+                                    <button onClick={() => handleEditar(index)}>Editar</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             {popupVisivel && (
