@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css'; // Importa o CSS do calendário
 import './agendamento.css';
 
 function Agendamento() {
@@ -68,6 +70,11 @@ function Agendamento() {
         setIndiceEdicao(index);
     };
 
+    const handleDataSelecionada = (date) => {
+        const dataFormatada = date.toISOString().split('T')[0]; // Formata a data para yyyy-MM-dd
+        setData(dataFormatada);
+    };
+
     return (
         <>
             <h2>Agendar Compromisso</h2>
@@ -83,11 +90,11 @@ function Agendamento() {
                     </div>
                     <div className="form-group">
                         <label>Data *</label>
-                        <input
-                            type="date"
-                            value={data}
-                            onChange={(e) => setData(e.target.value)}
+                        <Calendar
+                            onChange={handleDataSelecionada}
+                            value={data ? new Date(data) : new Date()}
                         />
+                        <p>Data selecionada: {data}</p>
                     </div>
                     <div className="form-group">
                         <label>Hora *</label>
