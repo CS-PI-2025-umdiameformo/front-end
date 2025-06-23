@@ -13,6 +13,8 @@ function Agendamento() {
     const [indiceEdicao, setIndiceEdicao] = useState(null);
     const [popupVisivel, setPopupVisivel] = useState(false);
     const [indiceExcluir, setIndiceExcluir] = useState(null);
+    const [modalVisivel, setModalVisivel] = useState(false);
+    const [agendamentosDoDia, setAgendamentosDoDia] = useState([]);
 
     const handleSalvar = () => {
         if (!titulo || !data || !hora) {
@@ -28,7 +30,8 @@ function Agendamento() {
             return;
         }
 
-        const novoAgendamento = { titulo, data, hora, descricao };
+        const dataFormatada = data.toLocaleDateString('en-CA');
+        const novoAgendamento = { titulo, data: dataFormatada, hora, descricao };
 
         if (indiceEdicao !== null) {
             const agendamentosAtualizados = [...agendamentos];
@@ -77,8 +80,28 @@ function Agendamento() {
     };
 
     const handleDataSelecionada = (date) => {
-        const dataFormatada = date.toISOString().split('T')[0];
-        setData(dataFormatada);
+        setData(date); 
+    };
+
+    const abrirModalAgendamentos = (dataFormatada) => {
+        const agendamentosNaData = agendamentos.filter((ag) => ag.data === dataFormatada);
+
+        if (agendamentosNaData.length > 0) {
+            setAgendamentosDoDia(agendamentosNaData);
+            setModalVisivel(true);
+        }
+    };
+
+    const renderTileContent = ({ date, view }) => {
+        if (view === 'month') {
+            const dataFormatada = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            const agendamentosNaData = agendamentos.filter((ag) => ag.data === dataFormatada);
+
+            if (agendamentosNaData.length > 0) {
+                return <div className="calendar-marker"></div>;
+            }
+        }
+        return null;
     };
 
     return (
@@ -99,8 +122,11 @@ function Agendamento() {
                         <Calendar
                             onChange={handleDataSelecionada}
                             value={data ? new Date(data) : new Date()}
+                            selectRange={false}
+                            tileContent={renderTileContent}
+                            onClickDay={(date) => abrirModalAgendamentos(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`)}
                         />
-                        <p>Data selecionada: {data}</p>
+                        <p>Data selecionada: {data ? new Date(data).toLocaleDateString('pt-BR') : 'Nenhuma data selecionada'}</p>
                     </div>
                     <div className="form-group">
                         <label>Hora *</label>
@@ -121,22 +147,6 @@ function Agendamento() {
                         {indiceEdicao !== null ? 'Atualizar Agendamento' : 'Salvar Agendamento'}
                     </button>
                     {mensagem && <div className="mensagem">{mensagem}</div>}
-                    <h3>Agendamentos</h3>
-                    <div className="lista-agendamentos">
-                        {agendamentos.map((ag, index) => (
-                            <div key={index} className="agendamento">
-                                <div className="agendamento-info">
-                                    <p><strong>{ag.titulo}</strong></p>
-                                    <p>{ag.data} {ag.hora}</p>
-                                    {ag.descricao && <p>{ag.descricao}</p>}
-                                </div>
-                                <div className="agendamento-acoes">
-                                    <button onClick={() => abrirPopupExcluir(index)}>Excluir</button>
-                                    <button onClick={() => handleEditar(index)}>Editar</button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
                 </div>
             </div>
 
@@ -146,6 +156,26 @@ function Agendamento() {
                         <p>Tem certeza de que deseja excluir este agendamento?</p>
                         <button onClick={handleExcluir}>Confirmar</button>
                         <button onClick={cancelarExcluir}>Cancelar</button>
+                    </div>
+                </div>
+            )}
+
+            {modalVisivel && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Agendamentos do dia</h3>
+                        {agendamentosDoDia.length > 0 ? (
+                            agendamentosDoDia.map((ag, index) => (
+                                <div key={index} className="agendamento-modal">
+                                    <p><strong>{ag.titulo}</strong></p>
+                                    <p>{ag.hora}</p>
+                                    {ag.descricao && <p>{ag.descricao}</p>}
+                                </div>
+                            ))
+                        ) : (
+                            <p>Nenhum agendamento para este dia.</p>
+                        )}
+                        <button onClick={() => setModalVisivel(false)}>Fechar</button>
                     </div>
                 </div>
             )}
