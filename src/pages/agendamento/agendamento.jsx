@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { fetchAgendamentoById } from '../../utils/api';
+import UpcomingEvents from '../../components/UpcomingEvents';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './agendamento.css';
@@ -15,6 +17,8 @@ function Agendamento() {
     const [indiceExcluir, setIndiceExcluir] = useState(null);
     const [modalVisivel, setModalVisivel] = useState(false);
     const [agendamentosDoDia, setAgendamentosDoDia] = useState([]);
+    const [modalDetalheVisivel, setModalDetalheVisivel] = useState(false);
+    const [agendamentoSelecionado, setAgendamentoSelecionado] = useState(null);
 
     const handleSalvar = () => {
         if (!titulo || !data || !hora) {
@@ -31,7 +35,13 @@ function Agendamento() {
         }
 
         const dataFormatada = data.toLocaleDateString('en-CA');
-        const novoAgendamento = { titulo, data: dataFormatada, hora, descricao };
+        const novoAgendamento = {
+            id: Date.now(),
+            titulo,
+            data: dataFormatada,
+            hora,
+            descricao,
+        };
 
         if (indiceEdicao !== null) {
             const agendamentosAtualizados = [...agendamentos];
@@ -92,6 +102,16 @@ function Agendamento() {
         }
     };
 
+    const abrirDetalheAgendamento = async (id) => {
+        try {
+            const dados = await fetchAgendamentoById(id);
+            setAgendamentoSelecionado(dados);
+            setModalDetalheVisivel(true);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const renderTileContent = ({ date, view }) => {
         if (view === 'month') {
             const dataFormatada = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -147,6 +167,7 @@ function Agendamento() {
                         {indiceEdicao !== null ? 'Atualizar Agendamento' : 'Salvar Agendamento'}
                     </button>
                     {mensagem && <div className="mensagem">{mensagem}</div>}
+                    <UpcomingEvents eventos={agendamentos} onSelecionar={abrirDetalheAgendamento} />
                 </div>
             </div>
 
@@ -166,7 +187,11 @@ function Agendamento() {
                         <h3>Agendamentos do dia</h3>
                         {agendamentosDoDia.length > 0 ? (
                             agendamentosDoDia.map((ag, index) => (
-                                <div key={index} className="agendamento-modal">
+                                <div
+                                    key={index}
+                                    className="agendamento-modal"
+                                    onClick={() => abrirDetalheAgendamento(ag.id)}
+                                >
                                     <p><strong>{ag.titulo}</strong></p>
                                     <p>{ag.hora}</p>
                                     {ag.descricao && <p>{ag.descricao}</p>}
@@ -176,6 +201,18 @@ function Agendamento() {
                             <p>Nenhum agendamento para este dia.</p>
                         )}
                         <button onClick={() => setModalVisivel(false)}>Fechar</button>
+                    </div>
+                </div>
+            )}
+
+            {modalDetalheVisivel && agendamentoSelecionado && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>{agendamentoSelecionado.titulo}</h3>
+                        <p>{new Date(agendamentoSelecionado.data).toLocaleDateString('pt-BR')} {agendamentoSelecionado.hora}</p>
+                        {agendamentoSelecionado.descricao && <p>{agendamentoSelecionado.descricao}</p>}
+                        {agendamentoSelecionado.regularidade && <p>Regularidade: {agendamentoSelecionado.regularidade}</p>}
+                        <button onClick={() => setModalDetalheVisivel(false)}>Fechar</button>
                     </div>
                 </div>
             )}
