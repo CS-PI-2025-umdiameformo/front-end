@@ -7,24 +7,28 @@ import Footer from "./components/footer/footer";
 import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
+import EsqueceuSenha from "./pages/esqueceuSenha/esqueceuSenha";
 
 function App() {
   return (
     <>
-      <Header nome="Organize Agenda" />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" Component={LoginUsuario} />
-          <Route path="/" Component={Home} />
-          <Route path="/calculadora" Component={Calculadora} />
-          <Route path="/cadastroUsuario" Component={CadastroUsuario} />
-          <Route path="/agendamento" element={<Agendamento />} />
-          <Route path="/loginUsuario" Component={LoginUsuario} />
-        </Routes>
-      </BrowserRouter>
-      <Footer />
+        <Header nome="Organize Agenda" />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" Component={LoginUsuario} />
+            <Route path="/" Component={Home} />
+            <Route path="/calculadora" Component={Calculadora} />
+            <Route path="/cadastroUsuario" Component={CadastroUsuario} />
+            <Route path="/agendamento" element={<Agendamento />} />
+            <Route path="/loginUsuario" Component={LoginUsuario} />
+
+            <Route path="/esqueceuSenha" Component={EsqueceuSenha} />
+          </Routes>
+        </BrowserRouter>
+        <Footer />
     </>
   );
 }
+
 
 export default App;
