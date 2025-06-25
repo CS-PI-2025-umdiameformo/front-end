@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './agendamento.css';
+import { InputText } from 'primereact/inputtext';
 
 function Agendamento() {
     const [titulo, setTitulo] = useState('');
@@ -75,11 +76,7 @@ function Agendamento() {
                 <div className="teste">
                     <div className="form-group">
                         <label>Título *</label>
-                        <input
-                            type="text"
-                            value={titulo}
-                            onChange={(e) => setTitulo(e.target.value)}
-                        />
+                        <InputText value={titulo} onChange={(e) => setTitulo(e.target.value)} />
                     </div>
                     <div className="form-group">
                         <label>Data *</label>
