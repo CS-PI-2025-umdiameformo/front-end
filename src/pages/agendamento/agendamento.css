@@ -126,19 +126,21 @@ button:hover {
   background-color: #305a8c;
 }
 
+/* Estilo específico para o popup de confirmação de exclusão */
 .popup {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.7); /* Overlay mais escuro para destacar */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999 !important;
+  z-index: 9999 !important; /* Valor extremamente alto para garantir prioridade */
 }
 
+/* Conteúdo do popup de exclusão */
 .popup-content {
   background: #fff;
   padding: 25px;
@@ -147,12 +149,13 @@ button:hover {
   max-width: 450px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 10000 !important;
+  z-index: 10000 !important; /* Ainda maior que o overlay */
   text-align: center;
-  border-top: 4px solid #ff5252;
-  animation: popup-appear 0.3s ease-out;
+  border-top: 4px solid #ff5252; /* Borda vermelha para alertar sobre exclusão */
+  animation: popup-appear 0.3s ease-out; /* Animação sutil */
 }
 
+/* Animação para o popup aparecer */
 @keyframes popup-appear {
   from {
     opacity: 0;
@@ -164,6 +167,7 @@ button:hover {
   }
 }
 
+/* Ajuste nos botões do popup */
 .popup-content .modal-actions {
   margin-top: 20px;
   display: flex;
@@ -172,7 +176,7 @@ button:hover {
 }
 
 .popup-content .modal-actions button:first-child {
-  background-color: #ff5252;
+  background-color: #ff5252; /* Vermelho para ação de confirmar exclusão */
 }
 
 .popup-content .modal-actions button:first-child:hover {
@@ -185,10 +189,11 @@ button:hover {
 }
 
 .popup-content h3 {
-  color: #ff5252;
+  color: #ff5252; /* Vermelho para título de exclusão */
   margin-top: 0;
 }
 
+/* Melhorias na estrutura geral do calendário */
 .react-calendar {
   background-color: white;
   border: none;
@@ -202,28 +207,30 @@ button:hover {
   margin: 0 auto;
 }
 
+/* Navegação do calendário reorganizada */
 .react-calendar__navigation {
   display: grid;
-  grid-template-columns: 45px 45px 1fr 45px 45px;
-  grid-gap: 8px;
+  grid-template-columns: 45px 45px 1fr 45px 45px; /* Botões maiores */
+  grid-gap: 8px; /* Espaçamento uniforme */
   align-items: center;
   background: linear-gradient(135deg, #4078c0, #305a8c);
   color: #ffffff;
   border-radius: 12px;
-  padding: 12px 18px;
+  padding: 12px 18px; /* Padding aumentado */
   margin-bottom: 25px;
   height: auto;
   box-shadow: 0 6px 20px rgba(48, 90, 140, 0.25), 
               0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Botões de navegação maiores e mais destacados */
 .react-calendar__navigation button {
-  width: 100%;
-  height: 42px;
+  width: 100%; /* Preenche todo o espaço da célula */
+  height: 42px; /* Altura maior */
   background: rgba(255, 255, 255, 0.18);
   border: none;
   color: white;
-  font-size: 1.3rem;
+  font-size: 1.3rem; /* Texto maior */
   cursor: pointer;
   border-radius: 50%;
   display: flex;
@@ -235,6 +242,7 @@ button:hover {
               inset 0 1px 2px rgba(255, 255, 255, 0.2);
 }
 
+/* Efeito hover melhorado */
 .react-calendar__navigation button:hover {
   background-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
@@ -242,39 +250,42 @@ button:hover {
               inset 0 1px 3px rgba(255, 255, 255, 0.3);
 }
 
+/* Container do título do mês - mais destacado */
 .react-calendar__navigation > button:nth-child(3) {
   grid-column: 3;
   width: auto;
-  border-radius: 22px;
+  border-radius: 22px; /* Mais arredondado */
   background: rgba(255, 255, 255, 0.22);
   font-weight: 600;
   font-size: 1.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 20px;
-  height: 42px;
+  padding: 8px 20px; /* Mais espaço lateral */
+  height: 42px; /* Mesma altura dos outros botões */
   color: white;
   margin: 0 auto;
-  max-width: 220px;
+  max-width: 220px; /* Mais espaço para o texto */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2),
               inset 0 1px 3px rgba(255, 255, 255, 0.25);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+/* Grade dos dias com sombreamento aprimorado - corrigida */
 .react-calendar__month-view__days {
   display: grid !important;
   grid-template-columns: repeat(7, 1fr) !important;
-  grid-gap: 4px !important;
-  padding: 12px 4px !important;
+  grid-gap: 4px !important; /* Reduzido para melhor alinhamento */
+  padding: 12px 4px !important; /* Ajustado para melhorar o posicionamento */
   background-color: rgba(245, 247, 250, 0.5);
   border-radius: 12px;
   box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.05);
 }
 
+/* Melhorias nos dias individuais para garantir alinhamento */
 .react-calendar__tile {
   width: 100% !important;
-  height: 40px !important;
+  height: 40px !important; /* Altura fixa para todos os dias */
   color: #333;
   font-size: 1.05rem;
   font-weight: 500;
@@ -287,11 +298,12 @@ button:hover {
   background: none;
   border: none;
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 0 !important; /* Removido margin que causa desalinhamento */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   overflow: visible;
 }
 
+/* Garantir que o texto dentro dos dias esteja centralizado */
 .react-calendar__tile abbr {
   position: absolute;
   top: 50%;
@@ -303,6 +315,7 @@ button:hover {
   text-align: center;
 }
 
+/* Ajuste para o marcador de eventos */
 .calendar-marker {
   position: absolute;
   bottom: 3px;
@@ -316,15 +329,18 @@ button:hover {
   z-index: 1;
 }
 
+/* Correção para dias de meses vizinhos */
 .react-calendar__month-view__days__day--neighboringMonth {
   opacity: 0.5;
 }
 
+/* Ajuste para o dia atual */
 .react-calendar__tile--now {
   background-color: rgba(64, 120, 192, 0.1);
   font-weight: bold;
 }
 
+/* Corrigir os estilos do modal e popup para garantir que apareçam corretamente */
 .modal, .popup {
   position: fixed;
   top: 0;
@@ -335,9 +351,10 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000; /* Aumentar para garantir que fique acima de tudo */
 }
 
+/* Garantir que o conteúdo do modal seja visível */
 .modal-content, .popup-content {
   background: #fff;
   padding: 20px;
@@ -346,9 +363,10 @@ button:hover {
   max-width: 500px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index: 1001;
+  z-index: 1001; /* Garantir que fique acima do overlay */
 }
 
+/* Indicador de campo obrigatório */
 .form-group label[for="titulo"]:after,
 .form-group label[for="hora"]:after {
   content: " *";
@@ -356,6 +374,7 @@ button:hover {
   font-weight: bold;
 }
 
+/* Melhorar o estilo dos campos somente leitura */
 .form-group p {
   background-color: #f5f7fa;
   padding: 12px;
@@ -367,12 +386,14 @@ button:hover {
   font-weight: 500;
 }
 
+/* Estilo para textarea */
 textarea {
   min-height: 100px;
   line-height: 1.4;
   resize: vertical;
 }
 
+/* Estilo de placeholder melhorado */
 ::placeholder {
   color: #aaa;
   opacity: 1;
