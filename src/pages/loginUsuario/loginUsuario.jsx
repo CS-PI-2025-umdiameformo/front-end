@@ -19,9 +19,8 @@ function LoginUsuario() {
       return;
     }
 
-    // Simula um login bem-sucedido
     alert("Login realizado com sucesso!");
-    navigate("/agendamento"); // Redireciona para a página de agendamento
+    navigate("/agendamento");
   };
 
   return (
@@ -48,9 +47,7 @@ function LoginUsuario() {
         <button type="submit">Login</button>
         <button
           type="button"
-          onClick={() =>
-            alert("Função de recuperação de senha ainda não implementada.")
-          }
+          onClick={() => navigate("/recuperar-senha")}
         >
           Esqueci a senha
         </button>
