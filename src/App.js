@@ -7,6 +7,7 @@ import Footer from "./components/footer/footer";
 import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
+import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/cadastroUsuario" Component={CadastroUsuario} />
           <Route path="/agendamento" element={<Agendamento />} />
           <Route path="/loginUsuario" Component={LoginUsuario} />
+          <Route path="/recuperar-senha" Component={RecuperacaoSenha} /> 
         </Routes>
       </BrowserRouter>
       <Footer />
