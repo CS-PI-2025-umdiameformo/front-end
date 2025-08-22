@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import "./styles/temas.css";
 import Header from "./components/header/header";
 import Calculadora from "./pages/calculadora/calculadora";
 import Home from "./pages/home/home";
@@ -8,12 +9,15 @@ import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
 import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
+import AlternadorTema from "./components/alternadorTema/alternadorTema";
+import { ProvedorTema } from "./context/ContextoTema";
 
 function App() {
   return (
-    <>
-      <Header nome="Organize Agenda" />
+    <ProvedorTema>
       <BrowserRouter>
+        <Header nome="Organize Agenda" />
+        <AlternadorTema />
         <Routes>
           <Route path="/login" Component={LoginUsuario} />
           <Route path="/" Component={Home} />
@@ -23,9 +27,9 @@ function App() {
           <Route path="/loginUsuario" Component={LoginUsuario} />
           <Route path="/recuperar-senha" Component={RecuperacaoSenha} /> 
         </Routes>
+        <Footer />
       </BrowserRouter>
-      <Footer />
-    </>
+    </ProvedorTema>
   );
 }
 
