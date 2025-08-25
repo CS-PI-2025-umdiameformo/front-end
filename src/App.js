@@ -9,15 +9,16 @@ import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
 import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
-import AlternadorTema from "./components/alternadorTema/alternadorTema";
-import { ProvedorTema } from "./context/ContextoTema";
+import AlternadorTema from "./components/alternadorTema/alternadorTema"; // Do HEAD
+import { ProvedorTema } from "./context/ContextoTema"; // Do HEAD
+import Perfil from "./pages/perfil/perfil"; // Do 8594d30
 
 function App() {
   return (
-    <ProvedorTema>
+    <ProvedorTema> {/* Do HEAD, envolvendo o BrowserRouter */}
       <BrowserRouter>
         <Header nome="Organize Agenda" />
-        <AlternadorTema />
+        <AlternadorTema /> {/* Do HEAD */}
         <Routes>
           <Route path="/login" Component={LoginUsuario} />
           <Route path="/" Component={Home} />
@@ -25,7 +26,8 @@ function App() {
           <Route path="/cadastroUsuario" Component={CadastroUsuario} />
           <Route path="/agendamento" element={<Agendamento />} />
           <Route path="/loginUsuario" Component={LoginUsuario} />
-          <Route path="/recuperar-senha" Component={RecuperacaoSenha} /> 
+          <Route path="/recuperar-senha" Component={RecuperacaoSenha} />
+          <Route path="/perfil" Component={Perfil} /> {/* Do 8594d30 */}
         </Routes>
         <Footer />
       </BrowserRouter>
