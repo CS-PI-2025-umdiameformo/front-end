@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header/header";
@@ -8,6 +9,7 @@ import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
 import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
+import Perfil from "./pages/perfil/perfil";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
           <Route path="/agendamento" element={<Agendamento />} />
           <Route path="/loginUsuario" Component={LoginUsuario} />
           <Route path="/recuperar-senha" Component={RecuperacaoSenha} /> 
+          <Route path="/perfil" Component={Perfil} />
         </Routes>
       </BrowserRouter>
       <Footer />
