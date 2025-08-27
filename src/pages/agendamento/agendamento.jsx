@@ -30,6 +30,7 @@ function Agendamento() {
             setAgendamentos(JSON.parse(agendamentosStorage));
         }
 
+        // Verificar se há um agendamento selecionado de uma notificação
         const agendamentoSelecionadoStorage = localStorage.getItem('agendamentoSelecionado');
         if (agendamentoSelecionadoStorage) {
             const agSelecionado = JSON.parse(agendamentoSelecionadoStorage);
@@ -334,15 +335,15 @@ function Agendamento() {
                             <button onClick={handleSalvarNoModal}>Adicionar</button>
                             <button onClick={() => {
                                 setModalCriacaoVisivel(false);
-
+                                // Verificar se há agendamentos na data atual (incluindo o recém-criado)
                                 const agendamentosNaDataAtual = agendamentos.filter(ag =>
                                     normalizarData(ag.data).getTime() === normalizarData(dataSelecionada).getTime()
                                 );
-
+                                // Se veio do modal de opções ou se já existem agendamentos, mostrar modal de opções
                                 if (origemCriacao === 'opcoes' || agendamentosNaDataAtual.length > 0) {
                                     setModalOpcoesVisivel(true);
                                 }
-
+                                // Limpar estado
                                 setOrigemCriacao(null);
                                 limparCampos();
                             }}>
@@ -423,6 +424,7 @@ function Agendamento() {
                 </div>
             )}
 
+            {/* Modal de detalhes de agendamento ao clicar na notificação */}
             {agendamentoDetalheVisivel && agendamentoSelecionado && (
                 <div className="modal" role="dialog" aria-modal="true">
                     <div className="modal-content">
