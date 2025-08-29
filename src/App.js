@@ -10,6 +10,7 @@ import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
 import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
+import GerenciadorNotificacoes from "./components/notificacao/notificacao";
 
 import Perfil from "./pages/perfil/perfil";
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/perfil" Component={Perfil} />
         </Routes>
         <Footer />
+        <GerenciadorNotificacoes />
       </BrowserRouter>
     </ProvedorTema>
   );

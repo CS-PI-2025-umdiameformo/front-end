@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './agendamento.css';
@@ -20,8 +20,35 @@ function Agendamento() {
     const [modalOpcoesVisivel, setModalOpcoesVisivel] = useState(false);
     const [origemCriacao, setOrigemCriacao] = useState(null); // 'direto' ou 'opcoes'
     const [modalEdicaoVisivel, setModalEdicaoVisivel] = useState(false);
+    const [agendamentoDetalheVisivel, setAgendamentoDetalheVisivel] = useState(false);
+    const [agendamentoSelecionado, setAgendamentoSelecionado] = useState(null);
 
-    // 1. Adicione esta única função utilitária que normaliza datas
+    // Efeito para carregar agendamentos do localStorage na inicialização
+    useEffect(() => {
+        const agendamentosStorage = localStorage.getItem('agendamentos');
+        if (agendamentosStorage) {
+            setAgendamentos(JSON.parse(agendamentosStorage));
+        }
+        
+        // Verificar se há um agendamento selecionado de uma notificação
+        const agendamentoSelecionadoStorage = localStorage.getItem('agendamentoSelecionado');
+        if (agendamentoSelecionadoStorage) {
+            const agSelecionado = JSON.parse(agendamentoSelecionadoStorage);
+            setAgendamentoSelecionado(agSelecionado);
+            setAgendamentoDetalheVisivel(true);
+            // Limpar o agendamento selecionado do localStorage
+            localStorage.removeItem('agendamentoSelecionado');
+        }
+    }, []);
+    
+    // Efeito para salvar agendamentos no localStorage quando eles mudarem
+    useEffect(() => {
+        if (agendamentos.length > 0) {
+            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+        }
+    }, [agendamentos]);
+
+    // 1. Função utilitária que normaliza datas
     const normalizarData = (date) => {
       // Se for um objeto Date
       if (date instanceof Date) {
@@ -460,6 +487,26 @@ const mostrarMensagemTemporaria = (texto, tipo = 'info', duracao = 3000) => {
                                 setModalVisivel(true); // Volta para o modal de visualização
                                 limparCampos();
                             }}>Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Modal de detalhes de agendamento ao clicar na notificação */}
+            {agendamentoDetalheVisivel && agendamentoSelecionado && (
+                <div className="modal" role="dialog" aria-modal="true">
+                    <div className="modal-content">
+                        <h3>Detalhes do Agendamento</h3>
+                        <div className="agendamento-detalhe">
+                            <p><strong>Título:</strong> {agendamentoSelecionado.titulo}</p>
+                            <p><strong>Data:</strong> {normalizarData(agendamentoSelecionado.data).toLocaleDateString('pt-BR')}</p>
+                            <p><strong>Horário:</strong> {agendamentoSelecionado.hora}</p>
+                            {agendamentoSelecionado.descricao && (
+                                <p><strong>Descrição:</strong> {agendamentoSelecionado.descricao}</p>
+                            )}
+                        </div>
+                        <div className="modal-actions">
+                            <button onClick={() => setAgendamentoDetalheVisivel(false)}>Fechar</button>
                         </div>
                     </div>
                 </div>
