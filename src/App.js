@@ -9,16 +9,17 @@ import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
 import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
-import AlternadorTema from "./components/alternadorTema/alternadorTema"; // Do HEAD
-import { ProvedorTema } from "./context/ContextoTema"; // Do HEAD
-import Perfil from "./pages/perfil/perfil"; // Do 8594d30
+import AlternadorTema from "./components/alternadorTema/alternadorTema";
+import { ProvedorTema } from "./context/ContextoTema";
+import Perfil from "./pages/perfil/perfil";
+import GerenciadorNotificacoes from "./components/notificacao/notificacao";
 
 function App() {
   return (
-    <ProvedorTema> {/* Do HEAD, envolvendo o BrowserRouter */}
+    <ProvedorTema>
       <BrowserRouter>
         <Header nome="Organize Agenda" />
-        <AlternadorTema /> {/* Do HEAD */}
+        <AlternadorTema />
         <Routes>
           <Route path="/login" Component={LoginUsuario} />
           <Route path="/" Component={Home} />
@@ -27,9 +28,10 @@ function App() {
           <Route path="/agendamento" element={<Agendamento />} />
           <Route path="/loginUsuario" Component={LoginUsuario} />
           <Route path="/recuperar-senha" Component={RecuperacaoSenha} />
-          <Route path="/perfil" Component={Perfil} /> {/* Do 8594d30 */}
+          <Route path="/perfil" Component={Perfil} />
         </Routes>
         <Footer />
+        <GerenciadorNotificacoes />
       </BrowserRouter>
     </ProvedorTema>
   );

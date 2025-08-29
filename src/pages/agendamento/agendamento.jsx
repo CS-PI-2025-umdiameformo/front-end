@@ -20,18 +20,30 @@ function Agendamento() {
     const [modalOpcoesVisivel, setModalOpcoesVisivel] = useState(false);
     const [origemCriacao, setOrigemCriacao] = useState(null);
     const [modalEdicaoVisivel, setModalEdicaoVisivel] = useState(false);
+    const [agendamentoDetalheVisivel, setAgendamentoDetalheVisivel] = useState(false);
+    const [agendamentoSelecionado, setAgendamentoSelecionado] = useState(null);
 
-    // ✅ Carrega os agendamentos do localStorage ao iniciar
+    // Efeito para carregar agendamentos do localStorage na inicialização
     useEffect(() => {
-        const agendamentosSalvos = localStorage.getItem('agendamentos');
-        if (agendamentosSalvos) {
-            setAgendamentos(JSON.parse(agendamentosSalvos));
+        const agendamentosStorage = localStorage.getItem('agendamentos');
+        if (agendamentosStorage) {
+            setAgendamentos(JSON.parse(agendamentosStorage));
+        }
+
+        const agendamentoSelecionadoStorage = localStorage.getItem('agendamentoSelecionado');
+        if (agendamentoSelecionadoStorage) {
+            const agSelecionado = JSON.parse(agendamentoSelecionadoStorage);
+            setAgendamentoSelecionado(agSelecionado);
+            setAgendamentoDetalheVisivel(true);
+            localStorage.removeItem('agendamentoSelecionado');
         }
     }, []);
 
-    // ✅ Salva no localStorage sempre que a lista muda
+    // Efeito para salvar agendamentos no localStorage quando eles mudarem
     useEffect(() => {
-        localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+        if (agendamentos.length > 0) {
+            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+        }
     }, [agendamentos]);
 
     const normalizarData = (date) => {
@@ -241,7 +253,194 @@ function Agendamento() {
                 </div>
             </div>
 
-            {/* Os modais continuam iguais — omitidos aqui por espaço */}
+            {popupVisivel && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <h3>Confirmação de Exclusão</h3>
+                        <p>Tem certeza de que deseja excluir este agendamento?</p>
+                        <div className="modal-actions">
+                            <button onClick={handleExcluir}>Confirmar</button>
+                            <button onClick={cancelarExcluir}>Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {modalVisivel && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Agendamentos do dia</h3>
+                        {mensagem && <div className="mensagem">{mensagem}</div>}
+                        {agendamentosDoDia.length > 0 ? (
+                            agendamentosDoDia.map((ag, index) => (
+                                <div key={index} className="agendamento-modal">
+                                    <p><strong>{ag.titulo}</strong></p>
+                                    <p>{ag.hora}</p>
+                                    {ag.descricao && <p>{ag.descricao}</p>}
+                                    <div className="agendamento-acoes">
+                                        <button onClick={() => handleEditar(index)}>Editar</button>
+                                        <button onClick={() => abrirPopupExcluir(index)}>Excluir</button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Nenhum agendamento para este dia.</p>
+                        )}
+                        <div className="modal-actions">
+                            <button onClick={() => {
+                                setModalVisivel(false);
+                                if (modalOpcoesVisivel === false) {
+                                    setModalOpcoesVisivel(true);
+                                }
+                            }}>Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {modalCriacaoVisivel && (
+                <div className="modal" role="dialog" aria-modal="true">
+                    <div className="modal-content">
+                        <h3>Criar Agendamento</h3>
+                        {mensagem && <div className="mensagem">{mensagem}</div>}
+                        <div className="form-group">
+                            <label>Título *</label>
+                            <input
+                                type="text"
+                                value={titulo}
+                                onChange={(e) => setTitulo(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Data</label>
+                            <p>{dataSelecionada ? normalizarData(dataSelecionada).toLocaleDateString('pt-BR') : ''}</p>
+                        </div>
+                        <div className="form-group">
+                            <label>Hora *</label>
+                            <input
+                                type="time"
+                                value={hora}
+                                onChange={(e) => setHora(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Descrição (opcional)</label>
+                            <textarea
+                                value={descricao}
+                                onChange={(e) => setDescricao(e.target.value)}
+                            />
+                        </div>
+                        <div className="modal-actions">
+                            <button onClick={handleSalvarNoModal}>Adicionar</button>
+                            <button onClick={() => {
+                                setModalCriacaoVisivel(false);
+
+                                const agendamentosNaDataAtual = agendamentos.filter(ag =>
+                                    normalizarData(ag.data).getTime() === normalizarData(dataSelecionada).getTime()
+                                );
+
+                                if (origemCriacao === 'opcoes' || agendamentosNaDataAtual.length > 0) {
+                                    setModalOpcoesVisivel(true);
+                                }
+
+                                setOrigemCriacao(null);
+                                limparCampos();
+                            }}>
+                                Voltar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {modalOpcoesVisivel && (
+                <div className="modal" role="dialog" aria-modal="true">
+                    <div className="modal-content">
+                        <h3>Opções para {dataSelecionada ? normalizarData(dataSelecionada).toLocaleDateString('pt-BR') : ''}</h3>
+                        <div className="modal-options">
+                            <button onClick={() => {
+                                setModalOpcoesVisivel(false);
+                                setOrigemCriacao('opcoes');
+                                setModalCriacaoVisivel(true);
+                            }}>
+                                Criar Agendamento
+                            </button>
+                            <button onClick={() => {
+                                setModalOpcoesVisivel(false);
+                                abrirModalAgendamentos(dataSelecionada);
+                            }}>
+                                Ver Agendamentos
+                            </button>
+                        </div>
+                        <div className="modal-actions">
+                            <button onClick={() => setModalOpcoesVisivel(false)}>Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {modalEdicaoVisivel && (
+                <div className="modal" role="dialog" aria-modal="true">
+                    <div className="modal-content edicao">
+                        <h3>Editar Agendamento</h3>
+                        {mensagem && <div className="mensagem">{mensagem}</div>}
+                        <div className="form-group">
+                            <label>Título *</label>
+                            <input
+                                type="text"
+                                value={titulo}
+                                onChange={(e) => setTitulo(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Data</label>
+                            <p>{dataSelecionada ? normalizarData(dataSelecionada).toLocaleDateString('pt-BR') : ''}</p>
+                        </div>
+                        <div className="form-group">
+                            <label>Hora *</label>
+                            <input
+                                type="time"
+                                value={hora}
+                                onChange={(e) => setHora(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Descrição (opcional)</label>
+                            <textarea
+                                value={descricao}
+                                onChange={(e) => setDescricao(e.target.value)}
+                            />
+                        </div>
+                        <div className="modal-actions">
+                            <button onClick={handleSalvarEdicao}>Salvar Alterações</button>
+                            <button onClick={() => {
+                                setModalEdicaoVisivel(false);
+                                setModalVisivel(true); // Volta para o modal de visualização
+                                limparCampos();
+                            }}>Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {agendamentoDetalheVisivel && agendamentoSelecionado && (
+                <div className="modal" role="dialog" aria-modal="true">
+                    <div className="modal-content">
+                        <h3>Detalhes do Agendamento</h3>
+                        <div className="agendamento-detalhe">
+                            <p><strong>Título:</strong> {agendamentoSelecionado.titulo}</p>
+                            <p><strong>Data:</strong> {normalizarData(agendamentoSelecionado.data).toLocaleDateString('pt-BR')}</p>
+                            <p><strong>Horário:</strong> {agendamentoSelecionado.hora}</p>
+                            {agendamentoSelecionado.descricao && (
+                                <p><strong>Descrição:</strong> {agendamentoSelecionado.descricao}</p>
+                            )}
+                        </div>
+                        <div className="modal-actions">
+                            <button onClick={() => setAgendamentoDetalheVisivel(false)}>Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
