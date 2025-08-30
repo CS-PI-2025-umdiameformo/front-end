@@ -32,3 +32,5 @@ class LocalStorageUDMF {
         // }
     }
 }
+
+export { LocalStorageUDMF };

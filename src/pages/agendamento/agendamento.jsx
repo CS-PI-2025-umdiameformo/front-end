@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './agendamento.css';
+import { LocalStorageUDMF } from '../../utils/LocalStorageUDMF';
 
 function Agendamento() {
     const [titulo, setTitulo] = useState('');
@@ -20,6 +21,15 @@ function Agendamento() {
     const [modalOpcoesVisivel, setModalOpcoesVisivel] = useState(false);
     const [origemCriacao, setOrigemCriacao] = useState(null); // 'direto' ou 'opcoes'
     const [modalEdicaoVisivel, setModalEdicaoVisivel] = useState(false);
+    const [usuario, setUsuario] = useState(null);
+    
+    useEffect(() => {
+        const localStorage = new LocalStorageUDMF();
+        const usuarioData = localStorage.get("usuario");
+        if (usuarioData) {
+            setUsuario(usuarioData);
+        }
+    }, []);
 
     // 1. Adicione esta única função utilitária que normaliza datas
     const normalizarData = (date) => {
@@ -255,6 +265,11 @@ const mostrarMensagemTemporaria = (texto, tipo = 'info', duracao = 3000) => {
     return (
         <>
             <h2>Agenda de Compromissos</h2>
+            {usuario && (
+                <div className="mensagem-boas-vindas">
+                    Bem-vindo à sua agenda, {usuario.nome}!
+                </div>
+            )}
             <div className="container">
                 <div className="calendario-container">
                     <Calendar

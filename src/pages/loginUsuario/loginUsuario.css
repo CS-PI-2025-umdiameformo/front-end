@@ -20,6 +20,19 @@ body {
   max-width: 350px;
   margin: auto;
   gap: 18px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: formularioAparecer 0.5s ease;
+}
+
+@keyframes formularioAparecer {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .formulario input[type="email"],
