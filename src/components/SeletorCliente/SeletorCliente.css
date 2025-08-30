@@ -1,0 +1,56 @@
+.seletor-cliente {
+  width: 100%;
+}
+
+.cliente-option {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+}
+
+.cliente-nome {
+  font-weight: 600;
+}
+
+.cliente-info {
+  display: flex;
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+  gap: 10px;
+}
+
+.cliente-telefone, .cliente-email {
+  display: inline-block;
+}
+
+.cliente-telefone {
+  margin-right: 10px;
+}
+
+.cliente-item {
+  padding: 8px;
+  border-bottom: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.cliente-item:hover {
+  background-color: var(--surface-hover);
+}
+
+.cliente-item-nome {
+  font-weight: 600;
+  display: block;
+}
+
+.cliente-item-telefone {
+  margin-left: 10px;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.cliente-item-email {
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  margin-top: 2px;
+}

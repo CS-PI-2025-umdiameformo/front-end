@@ -1,0 +1,392 @@
+/* Home page styles */
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  border-radius: 8px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../../img/logo.png') no-repeat center right;
+  background-size: contain;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.welcome-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.home-container h1:not(.welcome-section h1) {
+  color: var(--primary-color, #3B82F6);
+  margin-bottom: 0.5rem;
+}
+
+.feature-card {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.action-button {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card {
+  text-align: center;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  height: 100%;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stats-icon {
+  background-color: rgba(59, 130, 246, 0.1);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+}
+
+.stats-icon i {
+  font-size: 24px;
+  color: var(--primary-color, #3B82F6);
+}
+
+.stats-card:nth-child(2) .stats-icon {
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.stats-card:nth-child(2) .stats-icon i {
+  color: #22C55E;
+}
+
+.stats-card:nth-child(3) .stats-icon {
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.stats-card:nth-child(3) .stats-icon i {
+  color: #F59E0B;
+}
+
+.stats-card h3 {
+  font-size: 2.5rem;
+  margin: 0;
+  color: var(--primary-color, #3B82F6);
+  font-weight: 700;
+}
+
+.stats-card:nth-child(2) h3 {
+  color: #22C55E;
+}
+
+.stats-card:nth-child(3) h3 {
+  color: #F59E0B;
+}
+
+.stats-card p {
+  color: #6c757d;
+  margin: 8px 0 15px 0;
+  font-size: 1.1rem;
+}
+
+.custom-progress .p-progressbar {
+  height: 8px;
+}
+
+.custom-progress .p-progressbar-value {
+  background: var(--primary-color, #3B82F6);
+}
+
+.stats-card:nth-child(2) .custom-progress .p-progressbar-value {
+  background: #22C55E;
+}
+
+.stats-card:nth-child(3) .custom-progress .p-progressbar-value {
+  background: #F59E0B;
+}
+
+.dashboard-info {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color, #3B82F6);
+}
+
+.dashboard-info h4 {
+  color: #334155;
+  font-weight: 600;
+  margin-top: 0;
+}
+
+.dashboard-info p {
+  color: #64748b;
+  margin-bottom: 0;
+}
+
+.custom-panel .p-panel-header {
+  background-color: #f8fafc;
+}
+
+.custom-panel .p-panel-content {
+  background-color: #ffffff;
+  padding: 1.5rem;
+}
+
+.panel-intro {
+  background-color: #f0f9ff;
+  padding: 15px;
+  border-radius: 6px;
+  border-left: 4px solid #3B82F6;
+}
+
+.panel-intro p {
+  margin: 0;
+  color: #334155;
+}
+
+.data-management-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  height: 100%;
+}
+
+.data-management-section h3 {
+  color: #334155;
+  font-size: 1.25rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.import-container {
+  border: 2px dashed #e2e8f0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.custom-upload .p-fileupload-content {
+  padding: 25px 15px;
+}
+
+.empty-template {
+  text-align: center;
+  padding: 20px 10px;
+  color: #64748b;
+}
+
+.footer-info {
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+.footer-info p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+@media screen and (max-width: 768px) {
+  .welcome-section h1 {
+    font-size: 2rem;
+  }
+  
+  .welcome-subtitle {
+    font-size: 1rem;
+  }
+  
+  .stats-card {
+    margin-bottom: 15px;
+  }
+  
+  .data-management-section {
+    margin-bottom: 20px;
+  }
+  
+  .custom-panel .p-panel-content {
+    padding: 1rem;
+  }
+  
+  .panel-intro {
+    padding: 10px;
+  }
+  
+  .dashboard-info {
+    padding: 15px 10px;
+  }
+  
+  .dashboard-info p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-section, 
+.feature-card, 
+.stats-card, 
+.upcoming-card, 
+.custom-panel {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.welcome-section {
+  animation-delay: 0s;
+}
+
+.feature-card {
+  animation-delay: 0.2s;
+}
+
+.stats-card:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.stats-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.stats-card:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+.upcoming-card {
+  animation-delay: 0.6s;
+}
+
+.custom-panel {
+  animation-delay: 0.7s;
+}
+
+.p-fileupload .p-fileupload-content {
+  border: 1px dashed #ced4da;
+  padding: 25px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+/* Grid and layout classes */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+}
+
+.col-12 {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.p-4 {
+  padding: 1.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.h-full {
+  height: 100%;
+}
+
+/* Responsive design */
+@media screen and (min-width: 768px) {
+  .md\:col-4 {
+    width: 33.3333%;
+  }
+  
+  .md\:col-6 {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .lg\:col-4 {
+    width: 33.3333%;
+  }
+  
+  .lg\:col-8 {
+    width: 66.6667%;
+  }
+}

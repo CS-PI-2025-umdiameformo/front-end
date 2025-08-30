@@ -42,7 +42,7 @@ function RecuperacaoSenha() {
         Informe seu e-mail para receber as instruções de recuperação de senha.
       </p>
       
-      <form className="formulario" onSubmit={enviarSolicitacao}>
+      <form className="form-recovery" onSubmit={enviarSolicitacao}>
         <div className="campo-form">
           <label htmlFor="email">E-mail</label>
           <input
@@ -71,7 +71,7 @@ function RecuperacaoSenha() {
           </div>
         )}
         
-        <div className="formulario-botoes">
+        <div className="form-recovery-buttons">
           <button type="submit" className="btn-primario">
             Enviar Instruções
           </button>

@@ -1,3 +1,5 @@
+@import '../../styles/variables.css';
+
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
   min-height: 100vh;
@@ -5,14 +7,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #BFBACD
+  background: var(--background-accent);
 }
 
-.formulario {
-  background: #fff;
-  padding: 32px 28px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+.form-login {
+  background: var(--background-primary);
+  padding: var(--spacing-xxl) 28px;
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-light);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,65 +24,65 @@ body {
   gap: 18px;
 }
 
-.formulario input[type="email"],
-.formulario input[type="password"] {
+.form-login input[type="email"],
+.form-login input[type="password"] {
   width: 100%;
-  padding: 12px 10px;
-  border: 1px solid #dcdde1;
-  border-radius: 8px;
+  padding: var(--spacing-md) 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-medium);
   font-size: 1rem;
-  background: #f9f9f9;
-  transition: border 0.2s, background 0.2s, box-shadow 0.2s;
-  margin-bottom: 8px;
+  background: var(--background-secondary);
+  transition: border var(--transition-fast), background var(--transition-fast), box-shadow var(--transition-fast);
+  margin-bottom: var(--spacing-sm);
 }
 
-.formulario input[type="email"]:focus,
-.formulario input[type="password"]:focus {
-  border: 2px solid #4078c0;
+.form-login input[type="email"]:focus,
+.form-login input[type="password"]:focus {
+  border: 2px solid var(--border-color-focus);
   outline: none;
-  background: #fff;
+  background: var(--background-primary);
 }
 
-.formulario label {
+.form-login label {
   font-size: 0.98rem;
-  color: #555;
+  color: var(--text-color-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-sm);
 }
 
-.formulario button {
+.form-login button {
   padding: 10px 18px;
   border: none;
-  border-radius: 8px;
-  background: #4078c0;
-  color: #fff;
+  border-radius: var(--border-radius-medium);
+  background: var(--primary-color);
+  color: var(--background-primary);
   font-size: 1rem;
   cursor: pointer;
   margin-top: 6px;
-  transition: background 0.2s, color 0.2s;
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 
-.formulario button[type="button"] {
-  background: #e1e7ef;
-  color: #4078c0;
+.form-login button[type="button"] {
+  background: var(--primary-color-light);
+  color: var(--primary-color);
   margin-left: 0;
 }
 
-.formulario button:hover {
-  background: #305a8c;
+.form-login button:hover {
+  background: var(--primary-color-dark);
 }
 
-.formulario button[type="button"]:hover {
+.form-login button[type="button"]:hover {
   background: #d6deeb;
-  transition: background 0.2s;
+  transition: background var(--transition-fast);
 }
 
-.formulario-botoes {
+.form-login-buttons {
   display: flex;
   gap: 10px;
   width: 100%;
   justify-content: center;
-  margin-top: 8px;
+  margin-top: var(--spacing-sm);
 }

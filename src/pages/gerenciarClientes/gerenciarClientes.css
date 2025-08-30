@@ -1,0 +1,102 @@
+.gerenciar-clientes-page {
+  padding: 20px;
+}
+
+.gerenciar-clientes-page h2 {
+  margin-bottom: 10px;
+  color: var(--primary-color, #2196f3);
+}
+
+.gerenciar-clientes-page .subtitulo {
+  margin-bottom: 20px;
+  color: var(--text-color-secondary, #6c757d);
+}
+
+.gerenciar-clientes-page .card {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--surface-card, #ffffff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.gerenciar-clientes-page .acoes-cliente {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.gerenciar-clientes-page .p-toolbar {
+  border-radius: 6px;
+  background-color: var(--surface-section, #f8f9fa);
+  margin-bottom: 15px;
+}
+
+.filtro-campo {
+  width: 120px !important;
+}
+
+/* Form Styling */
+.cliente-dialog .p-field {
+  margin-bottom: 1.5rem;
+}
+
+.cliente-dialog .p-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.cliente-dialog .p-divider {
+  margin: 1.5rem 0;
+}
+
+.cliente-dialog .p-error {
+  color: var(--red-500);
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.cliente-dialog .p-message-error {
+  margin-bottom: 20px;
+}
+
+.error-content {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
+}
+
+.error-content i {
+  margin-right: 15px;
+  margin-top: 3px;
+}
+
+.error-content p {
+  margin: 5px 0;
+}
+
+.error-content .agendamentos-count {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: var(--surface-hover);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.confirmation-content {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+@media screen and (max-width: 768px) {
+  .gerenciar-clientes-page {
+    padding: 10px;
+  }
+  
+  .p-dialog {
+    width: 95% !important;
+    max-width: none !important;
+  }
+}
