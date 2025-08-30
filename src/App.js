@@ -16,6 +16,8 @@ import Perfil from "./pages/perfil/perfil";
 
 import AlternadorTema from "./components/alternadorTema/alternadorTema";
 import { ProvedorTema } from "./context/ContextoTema";
+import Perfil from "./pages/perfil/perfil";
+import GerenciadorNotificacoes from "./components/notificacao/notificacao";
 
 
 function App() {
