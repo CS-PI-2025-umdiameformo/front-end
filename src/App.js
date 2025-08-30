@@ -1,50 +1,48 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import "./App.css";
-import "./styles/temas.css";
 import Header from "./components/header/header";
 import Calculadora from "./pages/calculadora/calculadora";
+import Home from "./pages/home/home";
 import Footer from "./components/footer/footer";
 import CadastroUsuario from "./pages/cadastroUsuario/cadastroUsuario";
 import LoginUsuario from "./pages/loginUsuario/loginUsuario";
 import Agendamento from "./pages/agendamento/agendamento";
 import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
-import { LocalStorageUDMF } from "./utils/LocalStorageUDMF";
-import GerenciadorNotificacoes from "./components/notificacao/notificacao";
-import Perfil from "./pages/perfil/perfil";
-import AlternadorTema from "./components/alternadorTema/alternadorTema";
-import { ProvedorTema } from "./context/ContextoTema";
-import Perfil from "./pages/perfil/perfil";
-import GerenciadorNotificacoes from "./components/notificacao/notificacao";
+import GerenciarServicos from "./pages/gerenciarServicos/gerenciarServicos";
+import GerenciarClientes from "./pages/gerenciarClientes/gerenciarClientes";
+import { PrimeReactProvider } from 'primereact/api';
+import { inicializarDadosTeste } from "./utils/testDataManager";
 
 function App() {
-  const [headerNome, setHeaderNome] = useState("Organize Agenda");
-  
   useEffect(() => {
-    const localStorage = new LocalStorageUDMF();
-    const usuario = localStorage.get("usuario");
-    if (usuario) {
-      setHeaderNome(`Bem-vindo, ${usuario.nome}`);
-    }
+    inicializarDadosTeste();
   }, []);
-  
+
   return (
-    <ProvedorTema>
+    <PrimeReactProvider value={{
+      ripple: true,
+      inputStyle: 'outlined',
+      buttonStyle: 'outlined',
+      hideOverlaysOnDocumentScrolling: false
+    }}>
       <BrowserRouter>
-        <Header nome="Organize Agenda" />
-        <AlternadorTema />
         <Routes>
-          <Route path="/" Component={LoginUsuario} />
-          <Route path="/agendamento" element={<Agendamento />} />
-          <Route path="/calculadora" Component={Calculadora} />
-          <Route path="/cadastroUsuario" Component={CadastroUsuario} />
-          <Route path="/recuperar-senha" Component={RecuperacaoSenha} /> 
-          <Route path="/perfil" Component={Perfil} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<LoginUsuario />} />
+          <Route path="/recuperar-senha" element={<RecuperacaoSenha />} />
+          <Route path="/cadastroUsuario" element={<CadastroUsuario />} />
+          
+          {/* Rotas com Header */}
+          <Route path="/home" element={<><Header nome="Organize Agenda" /><Home /></>} />
+          <Route path="/calculadora" element={<><Header nome="Organize Agenda" /><Calculadora /></>} />
+          <Route path="/agendamento" element={<><Header nome="Organize Agenda" /><Agendamento /></>} />
+          <Route path="/servicos" element={<><Header nome="Organize Agenda" /><GerenciarServicos /></>} />
+          <Route path="/clientes" element={<><Header nome="Organize Agenda" /><GerenciarClientes /></>} />
         </Routes>
-        <Footer />
-        <GerenciadorNotificacoes />
       </BrowserRouter>
-    </ProvedorTema>
+      <Footer />
+    </PrimeReactProvider>
   );
 }
 

@@ -1,0 +1,102 @@
+.gerenciar-servicos-page {
+  padding: 20px;
+}
+
+.gerenciar-servicos-page .card {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--surface-card, #ffffff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.gerenciar-servicos-page h2 {
+  margin-bottom: 10px;
+  color: var(--primary-color, #2196f3);
+}
+
+.gerenciar-servicos-page .subtitulo {
+  margin-bottom: 20px;
+  color: var(--text-color-secondary, #6c757d);
+}
+
+.p-datatable-servicos .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+}
+
+.amostra-cor {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid #ddd;
+}
+
+.cor-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.acoes-servico {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tags-container .p-tag {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.confirmation-content {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.error-content {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
+}
+
+.error-content i {
+  margin-right: 15px;
+  margin-top: 3px;
+}
+
+.error-content p {
+  margin: 5px 0;
+}
+
+.gerenciar-servicos-page .p-toolbar {
+  border-radius: 6px;
+  background-color: var(--surface-section, #f8f9fa);
+  margin-bottom: 15px;
+}
+
+.p-dialog .p-dialog-header {
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+
+.p-dialog .p-dialog-footer {
+  padding: 0.75rem 1.5rem 1.25rem;
+}
+
+.p-colorpicker-preview {
+  width: 2rem;
+  height: 2rem;
+}
+
+.p-datatable .p-datatable-header {
+  background: transparent;
+  border: none;
+  padding-bottom: 1rem;
+}

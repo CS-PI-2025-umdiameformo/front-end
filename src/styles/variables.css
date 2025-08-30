@@ -1,0 +1,60 @@
+/* Variáveis CSS centralizadas para cores e estilos */
+:root {
+  /* Cores primárias */
+  --primary-color: #4078c0;
+  --primary-color-dark: #305a8c;
+  --primary-color-light: #e1e7ef;
+  --primary-color-lighter: #e3eeff;
+  
+  /* Cores de texto */
+  --text-color: #333;
+  --text-color-secondary: #555;
+  --text-color-muted: #666;
+  --text-color-light: #888;
+  
+  /* Cores de fundo */
+  --background-primary: #ffffff;
+  --background-secondary: #f9f9f9;
+  --background-accent: #BFBACD;
+  --background-hover: #f0f0f0;
+  --background-selected: #f0f7ff;
+  
+  /* Cores de borda */
+  --border-color: #dcdde1;
+  --border-color-focus: #4078c0;
+  --border-color-light: #eaeaea;
+  
+  /* Cores de estado */
+  --success-color: #00b894;
+  --success-background: #e6fffa;
+  --success-border: #55efc4;
+  
+  --error-color: #d63031;
+  --error-background: #ffe5e5;
+  --error-border: #fab1a0;
+  
+  --warning-color: #F59E0B;
+  --info-color: #22C55E;
+  
+  /* Sombras */
+  --shadow-light: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --shadow-focus: 0 0 0 3px rgba(64, 120, 192, 0.15);
+  
+  /* Bordas arredondadas */
+  --border-radius-small: 6px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 12px;
+  
+  /* Espaçamentos */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 32px;
+  
+  /* Transições */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+}

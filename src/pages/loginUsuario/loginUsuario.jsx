@@ -26,7 +26,7 @@ function LoginUsuario() {
   };
 
   return (
-    <form className="formulario" onSubmit={envioLogin}>
+    <form className="form-login" onSubmit={envioLogin}>
       <input
         type="email"
         placeholder="Digite seu email"
@@ -45,7 +45,7 @@ function LoginUsuario() {
         />
         Não sou um robô
       </label>
-      <div className="formulario-botoes">
+      <div className="form-login-buttons">
         <button type="submit">Login</button>
         <button
           type="button"
