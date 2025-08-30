@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './agendamento.css';
+import { LocalStorageUDMF } from '../../utils/LocalStorageUDMF';
 
 function Agendamento() {
     const [titulo, setTitulo] = useState('');
@@ -20,60 +21,17 @@ function Agendamento() {
     const [modalOpcoesVisivel, setModalOpcoesVisivel] = useState(false);
     const [origemCriacao, setOrigemCriacao] = useState(null);
     const [modalEdicaoVisivel, setModalEdicaoVisivel] = useState(false);
-    const [agendamentoDetalheVisivel, setAgendamentoDetalheVisivel] = useState(false);
-    const [agendamentoSelecionado, setAgendamentoSelecionado] = useState(null);
-
-    // Efeito para carregar agendamentos do localStorage na inicialização
-    useEffect(() => {
-        const agendamentosStorage = localStorage.getItem('agendamentos');
-        if (agendamentosStorage) {
-            setAgendamentos(JSON.parse(agendamentosStorage));
-        }
-
-        // Verificar se há um agendamento selecionado de uma notificação
-        const agendamentoSelecionadoStorage = localStorage.getItem('agendamentoSelecionado');
-        if (agendamentoSelecionadoStorage) {
-            const agSelecionado = JSON.parse(agendamentoSelecionadoStorage);
-            setAgendamentoSelecionado(agSelecionado);
-            setAgendamentoDetalheVisivel(true);
-            localStorage.removeItem('agendamentoSelecionado');
-        }
-    }, []);
-
-    // Efeito para salvar agendamentos no localStorage quando eles mudarem
-    useEffect(() => {
-        if (agendamentos.length > 0) {
-            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
-        }
-    }, [agendamentos]);
-
-
-    // Efeito para carregar agendamentos do localStorage na inicialização
-    useEffect(() => {
-        const agendamentosStorage = localStorage.getItem('agendamentos');
-        if (agendamentosStorage) {
-            setAgendamentos(JSON.parse(agendamentosStorage));
-        }
-        
-        // Verificar se há um agendamento selecionado de uma notificação
-        const agendamentoSelecionadoStorage = localStorage.getItem('agendamentoSelecionado');
-        if (agendamentoSelecionadoStorage) {
-            const agSelecionado = JSON.parse(agendamentoSelecionadoStorage);
-            setAgendamentoSelecionado(agSelecionado);
-            setAgendamentoDetalheVisivel(true);
-            // Limpar o agendamento selecionado do localStorage
-            localStorage.removeItem('agendamentoSelecionado');
-        }
-    }, []);
+     const [usuario, setUsuario] = useState(null);
     
-    // Efeito para salvar agendamentos no localStorage quando eles mudarem
     useEffect(() => {
-        if (agendamentos.length > 0) {
-            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+        const localStorage = new LocalStorageUDMF();
+        const usuarioData = localStorage.get("usuario");
+        if (usuarioData) {
+            setUsuario(usuarioData);
         }
-    }, [agendamentos]);
+    }, []);
 
-    // 1. Função utilitária que normaliza datas
+    // 1. Adicione esta única função utilitária que normaliza datas
     const normalizarData = (date) => {
         if (date instanceof Date) {
             return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
@@ -249,6 +207,11 @@ function Agendamento() {
     return (
         <>
             <h2>Agenda de Compromissos</h2>
+            {usuario && (
+                <div className="mensagem-boas-vindas">
+                    Bem-vindo à sua agenda, {usuario.nome}!
+                </div>
+            )}
             <div className="container">
                 <div className="calendario-container">
                     <Calendar
