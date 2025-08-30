@@ -47,6 +47,33 @@ function Agendamento() {
         }
     }, [agendamentos]);
 
+
+    // Efeito para carregar agendamentos do localStorage na inicialização
+    useEffect(() => {
+        const agendamentosStorage = localStorage.getItem('agendamentos');
+        if (agendamentosStorage) {
+            setAgendamentos(JSON.parse(agendamentosStorage));
+        }
+        
+        // Verificar se há um agendamento selecionado de uma notificação
+        const agendamentoSelecionadoStorage = localStorage.getItem('agendamentoSelecionado');
+        if (agendamentoSelecionadoStorage) {
+            const agSelecionado = JSON.parse(agendamentoSelecionadoStorage);
+            setAgendamentoSelecionado(agSelecionado);
+            setAgendamentoDetalheVisivel(true);
+            // Limpar o agendamento selecionado do localStorage
+            localStorage.removeItem('agendamentoSelecionado');
+        }
+    }, []);
+    
+    // Efeito para salvar agendamentos no localStorage quando eles mudarem
+    useEffect(() => {
+        if (agendamentos.length > 0) {
+            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+        }
+    }, [agendamentos]);
+
+    // 1. Função utilitária que normaliza datas
     const normalizarData = (date) => {
         if (date instanceof Date) {
             return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
@@ -423,7 +450,6 @@ function Agendamento() {
                     </div>
                 </div>
             )}
-
             {/* Modal de detalhes de agendamento ao clicar na notificação */}
             {agendamentoDetalheVisivel && agendamentoSelecionado && (
                 <div className="modal" role="dialog" aria-modal="true">
