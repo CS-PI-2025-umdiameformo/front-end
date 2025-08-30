@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import "./loginUsuario.css";
+import { LocalStorageUDMF } from "../../utils/LocalStorageUDMF";
 
 function LoginUsuario() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,8 @@ function LoginUsuario() {
       return;
     }
 
-    alert("Login realizado com sucesso!");
+    const localStorage = new LocalStorageUDMF();
+    localStorage.set("usuario", { email, nome: email.split('@')[0] });
     navigate("/agendamento");
   };
 

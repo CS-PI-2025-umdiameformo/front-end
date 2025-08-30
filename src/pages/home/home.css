@@ -243,31 +243,31 @@
   .welcome-section h1 {
     font-size: 2rem;
   }
-  
+
   .welcome-subtitle {
     font-size: 1rem;
   }
-  
+
   .stats-card {
     margin-bottom: 15px;
   }
-  
+
   .data-management-section {
     margin-bottom: 20px;
   }
-  
+
   .custom-panel .p-panel-content {
     padding: 1rem;
   }
-  
+
   .panel-intro {
     padding: 10px;
   }
-  
+
   .dashboard-info {
     padding: 15px 10px;
   }
-  
+
   .dashboard-info p {
     font-size: 0.9rem;
   }
@@ -375,7 +375,7 @@
   .md\:col-4 {
     width: 33.3333%;
   }
-  
+
   .md\:col-6 {
     width: 50%;
   }
@@ -385,7 +385,7 @@
   .lg\:col-4 {
     width: 33.3333%;
   }
-  
+
   .lg\:col-8 {
     width: 66.6667%;
   }
