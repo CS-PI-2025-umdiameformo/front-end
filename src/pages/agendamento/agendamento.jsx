@@ -19,9 +19,9 @@ function Agendamento() {
     const [modalCriacaoVisivel, setModalCriacaoVisivel] = useState(false);
     const [dataSelecionada, setDataSelecionada] = useState(null);
     const [modalOpcoesVisivel, setModalOpcoesVisivel] = useState(false);
-    const [origemCriacao, setOrigemCriacao] = useState(null); // 'direto' ou 'opcoes'
+    const [origemCriacao, setOrigemCriacao] = useState(null);
     const [modalEdicaoVisivel, setModalEdicaoVisivel] = useState(false);
-    const [usuario, setUsuario] = useState(null);
+     const [usuario, setUsuario] = useState(null);
     
     useEffect(() => {
         const localStorage = new LocalStorageUDMF();
@@ -33,21 +33,14 @@ function Agendamento() {
 
     // 1. Adicione esta única função utilitária que normaliza datas
     const normalizarData = (date) => {
-      // Se for um objeto Date
-      if (date instanceof Date) {
-        // Use hora 12 para evitar problemas de fuso horário
-        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
-      }
-      
-      // Se for uma string no formato ISO YYYY-MM-DD
-      if (typeof date === 'string' && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
-        const [year, month, day] = date.split('-').map(Number);
-        // Use hora 12 para evitar problemas de fuso
-        return new Date(year, month - 1, day, 12, 0, 0);
-      }
-      
-      // Fallback
-      return new Date();
+        if (date instanceof Date) {
+            return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
+        }
+        if (typeof date === 'string' && date.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            const [year, month, day] = date.split('-').map(Number);
+            return new Date(year, month - 1, day, 12, 0, 0);
+        }
+        return new Date();
     };
 
     const limparCampos = () => {
@@ -59,25 +52,12 @@ function Agendamento() {
     };
 
     const handleExcluir = () => {
-        // Remove o agendamento do array principal
         setAgendamentos((prev) => prev.filter((_, i) => i !== indiceExcluir));
-        
-        // Remove também do array de agendamentos do dia
         setAgendamentosDoDia((prev) => prev.filter((_, i) => i !== indiceExcluir));
-        
-        // Mostra mensagem de sucesso
         setMensagem('Agendamento excluído com sucesso!');
-        
-        // Fecha apenas o popup de confirmação, mantendo o modal de agendamentos aberto
         setPopupVisivel(false);
-        
-        // Limpa o índice de exclusão
         setIndiceExcluir(null);
-        
-        // Limpa a mensagem após 3 segundos
-        setTimeout(() => {
-            setMensagem('');
-        }, 3000);
+        setTimeout(() => setMensagem(''), 3000);
     };
 
     const abrirPopupExcluir = (index) => {
@@ -96,30 +76,22 @@ function Agendamento() {
         setHora(agendamento.hora);
         setDescricao(agendamento.descricao || '');
         setIndiceEdicao(index);
-        setDataSelecionada(agendamento.data); // Certifique-se de definir a data selecionada
-        setModalVisivel(false); // Fecha o modal de visualização
-        setModalEdicaoVisivel(true); // Abre o modal de edição
+        setDataSelecionada(agendamento.data);
+        setModalVisivel(false);
+        setModalEdicaoVisivel(true);
     };
 
     const handleDataSelecionada = (date) => {
-        setData(date); 
+        setData(date);
     };
 
     const abrirModalAgendamentos = (dataFormatada) => {
         const agendamentosNaData = agendamentos.filter((ag) => ag.data === dataFormatada);
-        
-        // Sempre define os agendamentos do dia (mesmo que seja uma lista vazia)
         setAgendamentosDoDia(agendamentosNaData);
-        
-        // Sempre abre o modal
         setModalVisivel(true);
-        
-        // Se não houver agendamentos, mostra uma mensagem
         if (agendamentosNaData.length === 0) {
-            setMensagem('Não há agendamentos para esta data. Você pode criar um novo agendamento.');
-            setTimeout(() => {
-                setMensagem('');
-            }, 3000);
+            setMensagem('Não há agendamentos para esta data.');
+            setTimeout(() => setMensagem(''), 3000);
         }
     };
 
@@ -128,41 +100,35 @@ function Agendamento() {
         setModalOpcoesVisivel(true);
     };
 
-    // 2. Modifique a função renderTileContent para usar objetos Date para comparação
     const renderTileContent = ({ date, view }) => {
         if (view === 'month') {
-            // Compare os objetos Date diretamente em vez de strings
             const normalizedDate = normalizarData(date);
-            
             const temAgendamento = agendamentos.some(ag => {
-              const agendamentoDate = normalizarData(ag.data);
-              return agendamentoDate.getTime() === normalizedDate.getTime();
+                const agendamentoDate = normalizarData(ag.data);
+                return agendamentoDate.getTime() === normalizedDate.getTime();
             });
-            
             if (temAgendamento) {
-              return <div className="calendar-marker"></div>;
+                return <div className="calendar-marker"></div>;
             }
         }
         return null;
     };
 
-    // Extrair função verificarDataPassada para evitar duplicação
     const verificarDataPassada = (dataString, horaString) => {
-      const hoje = new Date();
-      const dataSelecionada = normalizarData(dataString);
-      
-      // Se a data for hoje, verifique a hora
-      if (dataSelecionada.getDate() === hoje.getDate() && 
-          dataSelecionada.getMonth() === hoje.getMonth() && 
-          dataSelecionada.getFullYear() === hoje.getFullYear()) {
-          
-        const [horaAgendamento, minutoAgendamento] = horaString.split(':').map(Number);
-        return (hoje.getHours() > horaAgendamento || 
-               (hoje.getHours() === horaAgendamento && hoje.getMinutes() > minutoAgendamento));
-      }
-      
-      // Se não for hoje, compare apenas as datas
-      return dataSelecionada < hoje;
+        const hoje = new Date();
+        const dataSelecionada = normalizarData(dataString);
+        if (
+            dataSelecionada.getDate() === hoje.getDate() &&
+            dataSelecionada.getMonth() === hoje.getMonth() &&
+            dataSelecionada.getFullYear() === hoje.getFullYear()
+        ) {
+            const [horaAgendamento, minutoAgendamento] = horaString.split(':').map(Number);
+            return (
+                hoje.getHours() > horaAgendamento ||
+                (hoje.getHours() === horaAgendamento && hoje.getMinutes() > minutoAgendamento)
+            );
+        }
+        return dataSelecionada < hoje;
     };
 
     const handleSalvarNoModal = () => {
@@ -172,32 +138,23 @@ function Agendamento() {
         }
 
         if (verificarDataPassada(dataSelecionada, hora)) {
-          setMensagem('Não é possível criar compromissos em datas ou horários que já passaram.');
-          return;
+            setMensagem('Não é possível criar compromissos no passado.');
+            return;
         }
 
-        const novoAgendamento = { 
-            titulo, 
-            data: dataSelecionada, 
-            hora, 
-            descricao 
+        const novoAgendamento = {
+            titulo,
+            data: dataSelecionada,
+            hora,
+            descricao
         };
 
         setAgendamentos((prev) => [...prev, novoAgendamento]);
         mostrarMensagemTemporaria('Agendamento salvo com sucesso!', 'sucesso');
-        
-        // Limpa apenas os campos do formulário, mantendo o modal aberto
         setTitulo('');
         setHora('');
         setDescricao('');
-        
-        // Não fecha o modal: setModalCriacaoVisivel(false);
-        // Não limpa a data selecionada
-        
-        // Limpa a mensagem após 3 segundos
-        setTimeout(() => {
-            setMensagem('');
-        }, 3000);
+        setTimeout(() => setMensagem(''), 3000);
     };
 
     const handleSalvarEdicao = () => {
@@ -207,60 +164,45 @@ function Agendamento() {
         }
 
         if (verificarDataPassada(dataSelecionada, hora)) {
-          setMensagem('Não é possível criar compromissos em datas ou horários que já passaram.');
-          return;
+            setMensagem('Não é possível criar compromissos no passado.');
+            return;
         }
 
-        const agendamentoEditado = { 
-            titulo, 
-            data: dataSelecionada, 
-            hora, 
-            descricao 
+        const agendamentoEditado = {
+            titulo,
+            data: dataSelecionada,
+            hora,
+            descricao
         };
 
-        // Atualiza o agendamento no array principal
         const agendamentosAtualizados = [...agendamentos];
-        
-        // Encontrar o índice correto no array principal de agendamentos
         const indiceNoArrayPrincipal = agendamentos.findIndex(
-            ag => ag.titulo === agendamentosDoDia[indiceEdicao].titulo && 
-                 ag.data === agendamentosDoDia[indiceEdicao].data && 
-                 ag.hora === agendamentosDoDia[indiceEdicao].hora
+            ag =>
+                ag.titulo === agendamentosDoDia[indiceEdicao].titulo &&
+                ag.data === agendamentosDoDia[indiceEdicao].data &&
+                ag.hora === agendamentosDoDia[indiceEdicao].hora
         );
-        
+
         if (indiceNoArrayPrincipal !== -1) {
             agendamentosAtualizados[indiceNoArrayPrincipal] = agendamentoEditado;
             setAgendamentos(agendamentosAtualizados);
-            
-            // Atualiza também o array de agendamentos do dia
+
             const agendamentosDoDiaAtualizados = [...agendamentosDoDia];
             agendamentosDoDiaAtualizados[indiceEdicao] = agendamentoEditado;
             setAgendamentosDoDia(agendamentosDoDiaAtualizados);
-            
-            // Fecha o modal de edição e abre o de visualização
+
             setModalEdicaoVisivel(false);
             setModalVisivel(true);
-            
-            // Mostra mensagem de sucesso
             setMensagem('Agendamento atualizado com sucesso!');
-            
-            // Limpa os campos
             limparCampos();
-            
-            // Limpa a mensagem após 3 segundos
-            setTimeout(() => {
-                setMensagem('');
-            }, 3000);
+            setTimeout(() => setMensagem(''), 3000);
         }
     };
 
-    // Adicione esta função logo após a função verificarDataPassada
-const mostrarMensagemTemporaria = (texto, tipo = 'info', duracao = 3000) => {
-  setMensagem(texto);
-  setTimeout(() => {
-    setMensagem('');
-  }, duracao);
-};
+    const mostrarMensagemTemporaria = (texto, tipo = 'info', duracao = 3000) => {
+        setMensagem(texto);
+        setTimeout(() => setMensagem(''), duracao);
+    };
 
     return (
         <>
@@ -277,23 +219,18 @@ const mostrarMensagemTemporaria = (texto, tipo = 'info', duracao = 3000) => {
                         value={data ? new Date(data) : new Date()}
                         selectRange={false}
                         tileContent={renderTileContent}
-                        showNeighboringMonth={false} // Adicione esta linha
+                        showNeighboringMonth={false}
                         onClickDay={(date) => {
-                            // Cria uma data normalizada sem problemas de fuso horário
                             const dataObj = normalizarData(date);
-                            
-                            // Formata para armazenamento (YYYY-MM-DD)
                             const dataFormatada = `${dataObj.getFullYear()}-${String(dataObj.getMonth() + 1).padStart(2, '0')}-${String(dataObj.getDate()).padStart(2, '0')}`;
-                            
                             setDataSelecionada(dataFormatada);
                             setData(dataObj);
-                            
-                            // Use a mesma normalização para buscar agendamentos
+
                             const agendamentosNaData = agendamentos.filter(ag => {
-                              const agDate = normalizarData(ag.data);
-                              return agDate.getTime() === dataObj.getTime();
+                                const agDate = normalizarData(ag.data);
+                                return agDate.getTime() === dataObj.getTime();
                             });
-                            
+
                             if (agendamentosNaData.length > 0) {
                                 abrirModalOpcoes(dataFormatada);
                             } else {
@@ -388,17 +325,14 @@ const mostrarMensagemTemporaria = (texto, tipo = 'info', duracao = 3000) => {
                             <button onClick={handleSalvarNoModal}>Adicionar</button>
                             <button onClick={() => {
                                 setModalCriacaoVisivel(false);
-                                
                                 // Verificar se há agendamentos na data atual (incluindo o recém-criado)
-                                const agendamentosNaDataAtual = agendamentos.filter(ag => 
-                                  normalizarData(ag.data).getTime() === normalizarData(dataSelecionada).getTime()
+                                const agendamentosNaDataAtual = agendamentos.filter(ag =>
+                                    normalizarData(ag.data).getTime() === normalizarData(dataSelecionada).getTime()
                                 );
-                                
                                 // Se veio do modal de opções ou se já existem agendamentos, mostrar modal de opções
                                 if (origemCriacao === 'opcoes' || agendamentosNaDataAtual.length > 0) {
                                     setModalOpcoesVisivel(true);
                                 }
-                                
                                 // Limpar estado
                                 setOrigemCriacao(null);
                                 limparCampos();
@@ -475,6 +409,25 @@ const mostrarMensagemTemporaria = (texto, tipo = 'info', duracao = 3000) => {
                                 setModalVisivel(true); // Volta para o modal de visualização
                                 limparCampos();
                             }}>Voltar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Modal de detalhes de agendamento ao clicar na notificação */}
+            {agendamentoDetalheVisivel && agendamentoSelecionado && (
+                <div className="modal" role="dialog" aria-modal="true">
+                    <div className="modal-content">
+                        <h3>Detalhes do Agendamento</h3>
+                        <div className="agendamento-detalhe">
+                            <p><strong>Título:</strong> {agendamentoSelecionado.titulo}</p>
+                            <p><strong>Data:</strong> {normalizarData(agendamentoSelecionado.data).toLocaleDateString('pt-BR')}</p>
+                            <p><strong>Horário:</strong> {agendamentoSelecionado.hora}</p>
+                            {agendamentoSelecionado.descricao && (
+                                <p><strong>Descrição:</strong> {agendamentoSelecionado.descricao}</p>
+                            )}
+                        </div>
+                        <div className="modal-actions">
+                            <button onClick={() => setAgendamentoDetalheVisivel(false)}>Fechar</button>
                         </div>
                     </div>
                 </div>

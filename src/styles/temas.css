@@ -1,0 +1,53 @@
+:root {
+  --cor-fundo: #BFBACD;
+  --cor-texto: #333;
+  --cor-cartao: #ffffff;
+  --cor-entrada: #f9f9f9;
+  --borda-entrada: #dcdde1;
+  --sombra-entrada: rgba(0, 0, 0, 0.05);
+  --borda-foco-entrada: #4078c0;
+  --sombra-foco-entrada: rgba(64, 120, 192, 0.15);
+  --cor-botao: #4078c0;
+  --cor-botao-hover: #305a8c;
+  --cor-texto-botao: #ffffff;
+  --cor-calendario: #ffffff;
+  --sombra-calendario: rgba(48, 90, 140, 0.1);
+  --cor-nav-calendario: linear-gradient(135deg, #4078c0, #305a8c);
+  --cor-texto-nav: #ffffff;
+  --cor-bloco-calendario: rgba(245, 247, 250, 0.5);
+  --cor-texto-bloco: #333;
+  --cor-hoje-calendario: rgba(64, 120, 192, 0.1);
+  --cor-marcador-evento: #ff5252;
+  --cor-sobreposicao-modal: rgba(0, 0, 0, 0.5);
+  --cor-modal: #ffffff;
+  --sombra-modal: rgba(0, 0, 0, 0.2);
+  --cor-excluir: #ff5252;
+  --cor-excluir-hover: #e04545;
+}
+
+body.dark-theme {
+  --cor-fundo: #1a1a2e;
+  --cor-texto: #e6e6e6;
+  --cor-cartao: #272640;
+  --cor-entrada: #16213e;
+  --borda-entrada: #30475e;
+  --sombra-entrada: rgba(0, 0, 0, 0.2);
+  --borda-foco-entrada: #4078c0;
+  --sombra-foco-entrada: rgba(64, 120, 192, 0.3);
+  --cor-botao: #4078c0;
+  --cor-botao-hover: #305a8c;
+  --cor-texto-botao: #ffffff;
+  --cor-calendario: #272640;
+  --sombra-calendario: rgba(0, 0, 0, 0.3);
+  --cor-nav-calendario: linear-gradient(135deg, #305a8c, #1a1a2e);
+  --cor-texto-nav: #ffffff;
+  --cor-bloco-calendario: rgba(22, 33, 62, 0.5);
+  --cor-texto-bloco: #e6e6e6;
+  --cor-hoje-calendario: rgba(64, 120, 192, 0.2);
+  --cor-marcador-evento: #ff5252;
+  --cor-sobreposicao-modal: rgba(0, 0, 0, 0.7);
+  --cor-modal: #272640;
+  --sombra-modal: rgba(0, 0, 0, 0.4);
+  --cor-excluir: #ff5252;
+  --cor-excluir-hover: #e04545;
+}
