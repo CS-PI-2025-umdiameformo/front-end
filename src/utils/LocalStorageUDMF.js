@@ -341,3 +341,4 @@ class LocalStorageUDMF {
 // Exporta uma única instância para uso em toda a aplicação
 const storageService = new LocalStorageUDMF();
 export default storageService;
+export { LocalStorageUDMF }; 
