@@ -44,7 +44,7 @@ const Calculadora = () => {
       <input value={operador} onChange={(e) => setOperador(e.target.value)} />
       <br></br>
       <button onClick={() => calcular()}>Calcular</button> <br />
-      {1 == 1 && resultado}
+      {true && resultado}
     </div>
   );
 };

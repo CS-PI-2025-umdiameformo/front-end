@@ -1,56 +1,58 @@
+@import '../../styles/variables.css';
+
 .recuperacao-container {
   max-width: 450px;
   margin: 40px auto;
   padding: 30px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-medium);
+  box-shadow: var(--shadow-medium);
 }
 
 h2 {
   text-align: center;
-  color: #305a8c;
-  margin-bottom: 20px;
+  color: var(--primary-color-dark);
+  margin-bottom: var(--spacing-xl);
 }
 
 .instrucao {
-  color: #666;
+  color: var(--text-color-muted);
   text-align: center;
   margin-bottom: 25px;
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
-.formulario {
+.form-recovery {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--spacing-xl);
 }
 
 .campo-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-sm);
 }
 
 .campo-form label {
   font-weight: 500;
-  color: #444;
+  color: var(--text-color);
   font-size: 0.95rem;
 }
 
 .campo-form input {
-  padding: 12px 15px;
-  border: 1px solid #dcdde1;
-  border-radius: 6px;
+  padding: var(--spacing-md) 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .campo-form input:focus {
   outline: none;
-  border-color: #4078c0;
-  box-shadow: 0 0 0 3px rgba(64, 120, 192, 0.15);
+  border-color: var(--border-color-focus);
+  box-shadow: var(--shadow-focus);
 }
 
 .campo-checkbox {
@@ -61,7 +63,7 @@ h2 {
 .campo-checkbox label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-sm);
   cursor: pointer;
   user-select: none;
 }
@@ -73,53 +75,53 @@ h2 {
 }
 
 .mensagem {
-  padding: 12px;
-  border-radius: 6px;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-small);
   font-size: 0.9rem;
   text-align: center;
 }
 
 .mensagem.erro {
-  background-color: #ffe5e5;
-  color: #d63031;
-  border: 1px solid #fab1a0;
+  background-color: var(--error-background);
+  color: var(--error-color);
+  border: 1px solid var(--error-border);
 }
 
 .mensagem.sucesso {
-  background-color: #e6fffa;
-  color: #00b894;
-  border: 1px solid #55efc4;
+  background-color: var(--success-background);
+  color: var(--success-color);
+  border: 1px solid var(--success-border);
 }
 
-.formulario-botoes {
+.form-recovery-buttons {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-md);
   margin-top: 10px;
 }
 
 .btn-primario, .btn-secundario {
-  padding: 12px 18px;
+  padding: var(--spacing-md) 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--border-radius-small);
   font-size: 1rem;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .btn-primario {
-  background-color: #4078c0;
+  background-color: var(--primary-color);
   color: white;
 }
 
 .btn-primario:hover {
-  background-color: #305a8c;
+  background-color: var(--primary-color-dark);
 }
 
 .btn-secundario {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--background-hover);
+  color: var(--text-color);
 }
 
 .btn-secundario:hover {

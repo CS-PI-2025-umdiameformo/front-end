@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import "./loginUsuario.css";
+import { LocalStorageUDMF } from "../../utils/LocalStorageUDMF";
 
 function LoginUsuario() {
   const [email, setEmail] = useState("");
@@ -19,12 +20,13 @@ function LoginUsuario() {
       return;
     }
 
-    alert("Login realizado com sucesso!");
+    const localStorage = new LocalStorageUDMF();
+    localStorage.set("usuario", { email, nome: email.split('@')[0] });
     navigate("/agendamento");
   };
 
   return (
-    <form className="formulario" onSubmit={envioLogin}>
+    <form className="form-login" onSubmit={envioLogin}>
       <input
         type="email"
         placeholder="Digite seu email"
@@ -43,7 +45,7 @@ function LoginUsuario() {
         />
         Não sou um robô
       </label>
-      <div className="formulario-botoes">
+      <div className="form-login-buttons">
         <button type="submit">Login</button>
         <button
           type="button"
