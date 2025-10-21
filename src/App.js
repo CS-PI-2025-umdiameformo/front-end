@@ -11,6 +11,7 @@ import Agendamento from "./pages/agendamento/agendamento";
 import RecuperacaoSenha from "./pages/recuperacaoSenha/recuperacaoSenha";
 import GerenciarServicos from "./pages/gerenciarServicos/gerenciarServicos";
 import GerenciarClientes from "./pages/gerenciarClientes/gerenciarClientes";
+import RelatorioGastos from "./pages/relatorioGastos/relatorioGastos";
 import { PrimeReactProvider } from 'primereact/api';
 import { inicializarDadosTeste } from "./utils/testDataManager";
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/agendamento" element={<><Header nome="Organize Agenda" /><Agendamento /></>} />
           <Route path="/servicos" element={<><Header nome="Organize Agenda" /><GerenciarServicos /></>} />
           <Route path="/clientes" element={<><Header nome="Organize Agenda" /><GerenciarClientes /></>} />
+          <Route path="/relatorio-gastos" element={<><Header nome="Organize Agenda" /><RelatorioGastos /></>} />
         </Routes>
       </BrowserRouter>
       <Footer />
