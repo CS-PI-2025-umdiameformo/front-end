@@ -374,6 +374,111 @@ export const preferencesApi = {
 };
 
 /**
+ * API para gerenciamento de lembretes por email
+ */
+export const lembretesEmailApi = {
+  /**
+   * Obter todos os lembretes
+   * @returns {array} Lista de lembretes
+   */
+  getAll: () => {
+    return storageService.getLembretesEmail();
+  },
+
+  /**
+   * Adicionar um novo lembrete
+   * @param {object} lembrete Dados do lembrete
+   * @returns {object} Lembrete criado com ID
+   */
+  add: (lembrete) => {
+    const lembretes = storageService.getLembretesEmail();
+    const novoLembrete = {
+      ...lembrete,
+      id: lembrete.id || uuidv4(),
+      criadoEm: new Date().toISOString(),
+      enviado: false
+    };
+    const lembretesAtualizados = [...lembretes, novoLembrete];
+    storageService.setLembretesEmail(lembretesAtualizados);
+    return novoLembrete;
+  },
+
+  /**
+   * Marcar lembrete como enviado
+   * @param {string} id ID do lembrete
+   * @returns {boolean} true se atualizado com sucesso
+   */
+  marcarComoEnviado: (id) => {
+    const lembretes = storageService.getLembretesEmail();
+    const index = lembretes.findIndex(l => l.id === id);
+    
+    if (index === -1) return false;
+    
+    lembretes[index] = {
+      ...lembretes[index],
+      enviado: true,
+      enviadoEm: new Date().toISOString()
+    };
+    
+    storageService.setLembretesEmail(lembretes);
+    return true;
+  },
+
+  /**
+   * Excluir lembrete
+   * @param {string} id ID do lembrete
+   * @returns {boolean} true se excluído com sucesso
+   */
+  delete: (id) => {
+    const lembretes = storageService.getLembretesEmail();
+    const lembretesAtualizados = lembretes.filter(l => l.id !== id);
+    
+    if (lembretesAtualizados.length === lembretes.length) {
+      return false;
+    }
+    
+    storageService.setLembretesEmail(lembretesAtualizados);
+    return true;
+  },
+
+  /**
+   * Buscar lembretes por agendamento
+   * @param {string} agendamentoId ID do agendamento
+   * @returns {array} Lembretes filtrados
+   */
+  buscarPorAgendamento: (agendamentoId) => {
+    const lembretes = storageService.getLembretesEmail();
+    return lembretes.filter(l => l.agendamentoId === agendamentoId);
+  },
+
+  /**
+   * Buscar lembretes pendentes (não enviados)
+   * @returns {array} Lembretes pendentes
+   */
+  buscarPendentes: () => {
+    const lembretes = storageService.getLembretesEmail();
+    return lembretes.filter(l => !l.enviado);
+  },
+
+  /**
+   * Limpar lembretes antigos (mais de 7 dias após o agendamento)
+   */
+  limparAntigos: () => {
+    const lembretes = storageService.getLembretesEmail();
+    const agora = new Date();
+    const seteDiasEmMs = 7 * 24 * 60 * 60 * 1000;
+    
+    const lembretesAtualizados = lembretes.filter(lembrete => {
+      const dataAgendamento = new Date(`${lembrete.dataAgendamento}T${lembrete.horaAgendamento}`);
+      const diferencaMs = agora - dataAgendamento;
+      return diferencaMs < seteDiasEmMs;
+    });
+    
+    storageService.setLembretesEmail(lembretesAtualizados);
+  }
+};
+
+/**
  * Inicializa todos os dados para testes
  */
 export const initializeAllTestData = () => {
