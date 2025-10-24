@@ -14,6 +14,8 @@ import GerenciarClientes from "./pages/gerenciarClientes/gerenciarClientes";
 import RelatorioGastos from "./pages/relatorioGastos/relatorioGastos";
 import Perfil from "./pages/perfil/perfil";
 import TesteEmail from "./pages/testeEmail/testeEmail";
+import GerenciarUnificacoes from "./pages/gerenciarUnificacoes/gerenciarUnificacoes";
+import HistoricoUnificacoes from "./pages/historicoUnificacoes/historicoUnificacoes";
 import { PrimeReactProvider } from 'primereact/api';
 import { inicializarDadosTeste } from "./utils/testDataManager";
 import { inicializarSistemaLembretes, processarLembretesPendentes } from "./utils/lembretesEmailUtils";
@@ -71,6 +73,8 @@ function App() {
           <Route path="/relatorio-gastos" element={<><Header nome="Organize Agenda" /><RelatorioGastos /></>} />
           <Route path="/perfil" element={<><Header nome="Organize Agenda" /><Perfil /></>} />
           <Route path="/teste-email" element={<><Header nome="Organize Agenda" /><TesteEmail /></>} />
+          <Route path="/unificacoes" element={<><Header nome="Organize Agenda" /><GerenciarUnificacoes /></>} />
+          <Route path="/historico-unificacoes" element={<><Header nome="Organize Agenda" /><HistoricoUnificacoes /></>} />
         </Routes>
       </BrowserRouter>
       <Footer />

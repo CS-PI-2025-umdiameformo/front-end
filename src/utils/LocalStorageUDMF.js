@@ -12,7 +12,8 @@ class LocalStorageUDMF {
             agendamentos: 'agendamentos',
             userPreferences: 'userPreferences',
             formData: 'formData_',
-            lembretesEmail: 'lembretesEmail'
+            lembretesEmail: 'lembretesEmail',
+            historicoUnificacoes: 'historicoUnificacoes'
         };
     }
     
@@ -307,6 +308,22 @@ class LocalStorageUDMF {
      */
     setLembretesEmail(lembretes) {
         this.set(this.keyPrefixes.lembretesEmail, lembretes);
+    }
+
+    /**
+     * Carrega histórico de unificações do localStorage
+     * @returns {array} - Lista de unificações realizadas
+     */
+    getHistoricoUnificacoes() {
+        return this.get(this.keyPrefixes.historicoUnificacoes) || [];
+    }
+
+    /**
+     * Salva histórico de unificações no localStorage
+     * @param {array} historico - Lista de unificações
+     */
+    setHistoricoUnificacoes(historico) {
+        this.set(this.keyPrefixes.historicoUnificacoes, historico);
     }
 
     /**
