@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { TIPOS_SERVICO, formatarEventosComDuracao } from '../../utils/calendarConfig';
 import SeletorCliente from '../../components/SeletorCliente/SeletorCliente';
 import { clientesApi, agendamentosApi, servicosApi } from '../../utils/localStorageApi';
+import { criarLembreteParaAgendamento, atualizarLembreteAgendamento, removerLembretesAgendamento } from '../../utils/lembretesEmailUtils';
 
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -286,14 +287,23 @@ function Agendamento() {
         // Usar a API para adicionar o agendamento
         const agendamentoCriado = agendamentosApi.add(newEvent);
         
+        // Criar lembrete por e-mail para o agendamento
+        const lembreteCriado = criarLembreteParaAgendamento(agendamentoCriado);
+        
         // Atualizar o estado local após criação bem-sucedida
         setAgendamentos(prevAgendamentos => [...prevAgendamentos, agendamentoCriado]);
+        
+        // Mensagem de sucesso com informação sobre lembrete
+        let mensagemDetalhada = 'Agendamento criado com sucesso!';
+        if (lembreteCriado) {
+          mensagemDetalhada += ' Lembrete por e-mail agendado para 24h antes.';
+        }
         
         toast.current.show({ 
           severity: 'success', 
           summary: 'Sucesso', 
-          detail: 'Agendamento criado com sucesso!',
-          life: 3000 
+          detail: mensagemDetalhada,
+          life: 4000 
         });
       } catch (error) {
         console.error('Erro ao criar agendamento:', error);
@@ -312,6 +322,9 @@ function Agendamento() {
         const agendamentoAtualizado = agendamentosApi.update(updatedEvent);
         
         if (agendamentoAtualizado) {
+          // Atualizar lembrete para o agendamento modificado
+          atualizarLembreteAgendamento(updatedEvent);
+          
           // Atualizar o estado local após atualização bem-sucedida
           setAgendamentos(prevAgendamentos => 
             prevAgendamentos.map(agendamento => 
@@ -356,6 +369,9 @@ function Agendamento() {
         const sucesso = agendamentosApi.delete(eventIdToDelete);
         
         if (sucesso) {
+          // Remover lembretes associados ao agendamento
+          removerLembretesAgendamento(eventIdToDelete);
+          
           // Atualizar o estado local após exclusão bem-sucedida
           setAgendamentos((prev) => prev.filter(item => item.id !== eventIdToDelete));
           

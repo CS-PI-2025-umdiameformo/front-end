@@ -1,0 +1,338 @@
+.teste-email-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 100px);
+}
+
+.teste-email-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+}
+
+.teste-email-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 2em;
+}
+
+.subtitulo {
+  margin: 0;
+  opacity: 0.95;
+  font-size: 1.1em;
+}
+
+.mensagem-alerta {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mensagem-alerta.sucesso {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.mensagem-alerta.erro {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.mensagem-alerta.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.teste-email-conteudo {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 20px;
+  height: calc(100vh - 280px);
+}
+
+/* Painel de Seleção */
+.painel-selecao {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.secao-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.secao-card h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.2em;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #667eea;
+}
+
+.secao-card h4 {
+  margin: 0 0 10px 0;
+  color: #555;
+  font-size: 1em;
+}
+
+.lista-agendamentos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.item-agendamento {
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.item-agendamento:hover {
+  border-color: #667eea;
+  background-color: #f8f9ff;
+}
+
+.item-agendamento.selecionado {
+  border-color: #667eea;
+  background-color: #e8ebff;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+.agendamento-info strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 0.95em;
+}
+
+.agendamento-detalhes {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.agendamento-cliente {
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 5px;
+}
+
+.aviso-vazio {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}
+
+.aviso-vazio p {
+  margin: 5px 0;
+}
+
+/* Seção de Ações */
+.secao-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-acao {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.btn-acao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primario:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secundario {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-secundario:hover:not(:disabled) {
+  background: #f8f9ff;
+  transform: translateY(-2px);
+}
+
+/* Seção de Informações */
+.secao-info {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+}
+
+.lista-info {
+  margin: 0;
+  padding-left: 20px;
+  color: #856404;
+  font-size: 0.9em;
+}
+
+.lista-info li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* Painel de Visualização */
+.painel-visualizacao {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.controles-visualizacao {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: none;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  color: #666;
+}
+
+.tab:hover {
+  background: #e8ebff;
+  color: #667eea;
+}
+
+.tab.ativo {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.area-visualizacao {
+  flex: 1;
+  overflow: auto;
+  background: #f4f4f4;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 1.1em;
+  text-align: center;
+  padding: 40px;
+}
+
+.email-preview {
+  height: 100%;
+  padding: 20px;
+}
+
+.email-codigo {
+  padding: 20px;
+  height: 100%;
+  overflow: auto;
+}
+
+.email-codigo pre {
+  margin: 0;
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.email-codigo code {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .teste-email-conteudo {
+    grid-template-columns: 300px 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+  .teste-email-conteudo {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  
+  .painel-visualizacao {
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .teste-email-container {
+    padding: 10px;
+  }
+  
+  .teste-email-header h2 {
+    font-size: 1.5em;
+  }
+  
+  .subtitulo {
+    font-size: 0.9em;
+  }
+}
