@@ -374,6 +374,288 @@ export const preferencesApi = {
 };
 
 /**
+ * API para gerenciamento de lembretes por email
+ */
+export const lembretesEmailApi = {
+  /**
+   * Obter todos os lembretes
+   * @returns {array} Lista de lembretes
+   */
+  getAll: () => {
+    return storageService.getLembretesEmail();
+  },
+
+  /**
+   * Adicionar um novo lembrete
+   * @param {object} lembrete Dados do lembrete
+   * @returns {object} Lembrete criado com ID
+   */
+  add: (lembrete) => {
+    const lembretes = storageService.getLembretesEmail();
+    const novoLembrete = {
+      ...lembrete,
+      id: lembrete.id || uuidv4(),
+      criadoEm: new Date().toISOString(),
+      enviado: false
+    };
+    const lembretesAtualizados = [...lembretes, novoLembrete];
+    storageService.setLembretesEmail(lembretesAtualizados);
+    return novoLembrete;
+  },
+
+  /**
+   * Marcar lembrete como enviado
+   * @param {string} id ID do lembrete
+   * @returns {boolean} true se atualizado com sucesso
+   */
+  marcarComoEnviado: (id) => {
+    const lembretes = storageService.getLembretesEmail();
+    const index = lembretes.findIndex(l => l.id === id);
+    
+    if (index === -1) return false;
+    
+    lembretes[index] = {
+      ...lembretes[index],
+      enviado: true,
+      enviadoEm: new Date().toISOString()
+    };
+    
+    storageService.setLembretesEmail(lembretes);
+    return true;
+  },
+
+  /**
+   * Excluir lembrete
+   * @param {string} id ID do lembrete
+   * @returns {boolean} true se excluído com sucesso
+   */
+  delete: (id) => {
+    const lembretes = storageService.getLembretesEmail();
+    const lembretesAtualizados = lembretes.filter(l => l.id !== id);
+    
+    if (lembretesAtualizados.length === lembretes.length) {
+      return false;
+    }
+    
+    storageService.setLembretesEmail(lembretesAtualizados);
+    return true;
+  },
+
+  /**
+   * Buscar lembretes por agendamento
+   * @param {string} agendamentoId ID do agendamento
+   * @returns {array} Lembretes filtrados
+   */
+  buscarPorAgendamento: (agendamentoId) => {
+    const lembretes = storageService.getLembretesEmail();
+    return lembretes.filter(l => l.agendamentoId === agendamentoId);
+  },
+
+  /**
+   * Buscar lembretes pendentes (não enviados)
+   * @returns {array} Lembretes pendentes
+   */
+  buscarPendentes: () => {
+    const lembretes = storageService.getLembretesEmail();
+    return lembretes.filter(l => !l.enviado);
+  },
+
+  /**
+   * Limpar lembretes antigos (mais de 7 dias após o agendamento)
+   */
+  limparAntigos: () => {
+    const lembretes = storageService.getLembretesEmail();
+    const agora = new Date();
+    const seteDiasEmMs = 7 * 24 * 60 * 60 * 1000;
+    
+    const lembretesAtualizados = lembretes.filter(lembrete => {
+      const dataAgendamento = new Date(`${lembrete.dataAgendamento}T${lembrete.horaAgendamento}`);
+      const diferencaMs = agora - dataAgendamento;
+      return diferencaMs < seteDiasEmMs;
+    });
+    
+    storageService.setLembretesEmail(lembretesAtualizados);
+  }
+};
+
+/**
+ * API para gerenciamento de unificações de dados
+ */
+export const unificacoesApi = {
+  /**
+   * Obter todo o histórico de unificações
+   * @returns {array} Lista de unificações
+   */
+  getHistorico: () => {
+    return storageService.getHistoricoUnificacoes();
+  },
+
+  /**
+   * Adicionar unificação ao histórico
+   * @param {object} unificacao Dados da unificação
+   * @returns {object} Unificação registrada
+   */
+  addHistorico: (unificacao) => {
+    const historico = storageService.getHistoricoUnificacoes();
+    const novaUnificacao = {
+      ...unificacao,
+      id: unificacao.id || uuidv4(),
+      dataUnificacao: new Date().toISOString()
+    };
+    const historicoAtualizado = [...historico, novaUnificacao];
+    storageService.setHistoricoUnificacoes(historicoAtualizado);
+    return novaUnificacao;
+  },
+
+  /**
+   * Unificar clientes
+   * @param {object} clientePrincipal Cliente que será mantido
+   * @param {array} clientesDuplicados Clientes que serão unificados
+   * @returns {object} Resultado da unificação
+   */
+  unificarClientes: (clientePrincipal, clientesDuplicados) => {
+    // Obter todos os agendamentos
+    const agendamentos = storageService.getAgendamentos();
+    const idsParaRemover = clientesDuplicados.map(c => c.id);
+    
+    // Atualizar agendamentos que referenciam os clientes duplicados
+    const agendamentosAtualizados = agendamentos.map(agendamento => {
+      if (idsParaRemover.includes(agendamento.clienteId)) {
+        return {
+          ...agendamento,
+          clienteId: clientePrincipal.id
+        };
+      }
+      return agendamento;
+    });
+    
+    // Remover clientes duplicados
+    const clientes = storageService.getClients();
+    const clientesAtualizados = clientes.filter(c => !idsParaRemover.includes(c.id));
+    
+    // Salvar alterações
+    storageService.setClients(clientesAtualizados);
+    storageService.setAgendamentos(agendamentosAtualizados);
+    
+    // Registrar no histórico
+    const unificacao = {
+      tipo: 'cliente',
+      itemPrincipal: clientePrincipal,
+      itensRemovidos: clientesDuplicados,
+      agendamentosAfetados: agendamentosAtualizados.filter(a => 
+        idsParaRemover.includes(a.clienteId)
+      ).length
+    };
+    
+    unificacoesApi.addHistorico(unificacao);
+    
+    return {
+      sucesso: true,
+      clienteMantido: clientePrincipal,
+      clientesRemovidos: clientesDuplicados.length,
+      agendamentosAtualizados: agendamentosAtualizados.filter(a => 
+        a.clienteId === clientePrincipal.id
+      ).length
+    };
+  },
+
+  /**
+   * Unificar tipos de serviço
+   * @param {object} servicoPrincipal Serviço que será mantido
+   * @param {array} servicosDuplicados Serviços que serão unificados
+   * @returns {object} Resultado da unificação
+   */
+  unificarServicos: (servicoPrincipal, servicosDuplicados) => {
+    // Obter todos os agendamentos
+    const agendamentos = storageService.getAgendamentos();
+    const idsParaRemover = servicosDuplicados.map(s => s.id);
+    
+    // Atualizar agendamentos que referenciam os serviços duplicados
+    const agendamentosAtualizados = agendamentos.map(agendamento => {
+      if (idsParaRemover.includes(agendamento.tipoServicoId)) {
+        return {
+          ...agendamento,
+          tipoServicoId: servicoPrincipal.id,
+          duracao: servicoPrincipal.duracao,
+          valor: servicoPrincipal.valor
+        };
+      }
+      return agendamento;
+    });
+    
+    // Remover serviços duplicados
+    const servicos = storageService.getServiceTypes();
+    const servicosAtualizados = servicos.filter(s => !idsParaRemover.includes(s.id));
+    
+    // Salvar alterações
+    storageService.setServiceTypes(servicosAtualizados);
+    storageService.setAgendamentos(agendamentosAtualizados);
+    
+    // Registrar no histórico
+    const unificacao = {
+      tipo: 'servico',
+      itemPrincipal: servicoPrincipal,
+      itensRemovidos: servicosDuplicados,
+      agendamentosAfetados: agendamentosAtualizados.filter(a => 
+        idsParaRemover.includes(a.tipoServicoId)
+      ).length
+    };
+    
+    unificacoesApi.addHistorico(unificacao);
+    
+    return {
+      sucesso: true,
+      servicoMantido: servicoPrincipal,
+      servicosRemovidos: servicosDuplicados.length,
+      agendamentosAtualizados: agendamentosAtualizados.filter(a => 
+        a.tipoServicoId === servicoPrincipal.id
+      ).length
+    };
+  },
+
+  /**
+   * Desfazer unificação (restaurar estado anterior)
+   * @param {string} unificacaoId ID da unificação a desfazer
+   * @returns {object} Resultado da operação
+   */
+  desfazerUnificacao: (unificacaoId) => {
+    const historico = storageService.getHistoricoUnificacoes();
+    const unificacao = historico.find(u => u.id === unificacaoId);
+    
+    if (!unificacao) {
+      return { sucesso: false, erro: 'Unificação não encontrada' };
+    }
+    
+    // Restaurar itens removidos
+    if (unificacao.tipo === 'cliente') {
+      const clientes = storageService.getClients();
+      const clientesRestaurados = [...clientes, ...unificacao.itensRemovidos];
+      storageService.setClients(clientesRestaurados);
+    } else if (unificacao.tipo === 'servico') {
+      const servicos = storageService.getServiceTypes();
+      const servicosRestaurados = [...servicos, ...unificacao.itensRemovidos];
+      storageService.setServiceTypes(servicosRestaurados);
+    }
+    
+    // Marcar unificação como desfeita
+    const historicoAtualizado = historico.map(u => {
+      if (u.id === unificacaoId) {
+        return { ...u, desfeita: true, dataDesfazimento: new Date().toISOString() };
+      }
+      return u;
+    });
+    
+    storageService.setHistoricoUnificacoes(historicoAtualizado);
+    
+    return {
+      sucesso: true,
+      mensagem: 'Unificação desfeita com sucesso',
+      itensRestaurados: unificacao.itensRemovidos.length
+    };
+  }
+};
+
+/**
  * Inicializa todos os dados para testes
  */
 export const initializeAllTestData = () => {

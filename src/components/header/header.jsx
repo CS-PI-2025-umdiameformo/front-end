@@ -16,6 +16,10 @@ const Header = ({ nome }) => {
             <li><a href="/agendamento">Agenda</a></li>
             <li><a href="/servicos">Serviços</a></li>
             <li><a href="/clientes">Clientes</a></li>
+            <li><a href="/unificacoes">Unificações</a></li>
+            <li><a href="/relatorio-gastos">Relatórios</a></li>
+            <li><a href="/teste-email">Teste E-mail</a></li>
+            <li><a href="/perfil">Perfil</a></li>
           </ul>
         </nav>
       </div>

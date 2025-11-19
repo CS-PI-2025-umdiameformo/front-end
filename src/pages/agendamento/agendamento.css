@@ -24,6 +24,35 @@ body {
   margin-bottom: 0;
 }
 
+.calendar-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.relatorio-link {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.relatorio-link .p-button {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transition: all 0.3s ease;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-medium);
+}
+
+.relatorio-link .p-button:hover {
+  background-color: var(--primary-color-dark);
+  border-color: var(--primary-color-dark);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-2px);
+}
+
 .calendar-toggle {
   display: flex;
   gap: 10px;

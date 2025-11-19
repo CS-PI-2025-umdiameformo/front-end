@@ -11,7 +11,9 @@ class LocalStorageUDMF {
             serviceTypes: 'serviceTypes',
             agendamentos: 'agendamentos',
             userPreferences: 'userPreferences',
-            formData: 'formData_'
+            formData: 'formData_',
+            lembretesEmail: 'lembretesEmail',
+            historicoUnificacoes: 'historicoUnificacoes'
         };
     }
     
@@ -284,7 +286,44 @@ class LocalStorageUDMF {
      * @returns {object} - Preferências do usuário
      */
     getUserPreferences() {
-        return this.get(this.keyPrefixes.userPreferences) || {};
+        const preferences = this.get(this.keyPrefixes.userPreferences) || {};
+        // Define valores padrão se não existirem
+        if (preferences.lembretesEmailAtivos === undefined) {
+            preferences.lembretesEmailAtivos = true;
+        }
+        return preferences;
+    }
+
+    /**
+     * Carrega lembretes de email do localStorage
+     * @returns {array} - Lista de lembretes agendados
+     */
+    getLembretesEmail() {
+        return this.get(this.keyPrefixes.lembretesEmail) || [];
+    }
+
+    /**
+     * Salva lembretes de email no localStorage
+     * @param {array} lembretes - Lista de lembretes
+     */
+    setLembretesEmail(lembretes) {
+        this.set(this.keyPrefixes.lembretesEmail, lembretes);
+    }
+
+    /**
+     * Carrega histórico de unificações do localStorage
+     * @returns {array} - Lista de unificações realizadas
+     */
+    getHistoricoUnificacoes() {
+        return this.get(this.keyPrefixes.historicoUnificacoes) || [];
+    }
+
+    /**
+     * Salva histórico de unificações no localStorage
+     * @param {array} historico - Lista de unificações
+     */
+    setHistoricoUnificacoes(historico) {
+        this.set(this.keyPrefixes.historicoUnificacoes, historico);
     }
 
     /**

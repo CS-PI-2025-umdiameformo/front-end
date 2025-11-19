@@ -8,7 +8,8 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import { v4 as uuidv4 } from 'uuid';
 import { TIPOS_SERVICO, formatarEventosComDuracao } from '../../utils/calendarConfig';
 import SeletorCliente from '../../components/SeletorCliente/SeletorCliente';
-import { clientesApi, agendamentosApi } from '../../utils/localStorageApi';
+import { clientesApi, agendamentosApi, servicosApi } from '../../utils/localStorageApi';
+import { criarLembreteParaAgendamento, atualizarLembreteAgendamento, removerLembretesAgendamento } from '../../utils/lembretesEmailUtils';
 
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -32,6 +33,7 @@ function Agendamento() {
     const [selectedClientId, setSelectedClientId] = useState(null);
     const [clients, setClients] = useState([]);
     const [agendamentos, setAgendamentos] = useState([]);
+    const [tiposServico, setTiposServico] = useState([]);
     const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
     const [eventIdToDelete, setEventIdToDelete] = useState(null);
     const [eventForm, setEventForm] = useState({
@@ -41,7 +43,9 @@ function Agendamento() {
       duracao: 60,
       descricao: '',
       tipo: 'outro',
-      clienteId: null
+      tipoServicoId: null,
+      clienteId: null,
+      valor: 0
     });
     
     useEffect(() => {
@@ -54,9 +58,15 @@ function Agendamento() {
         const clientesCarregados = clientesApi.getAll();
         setClients(clientesCarregados);
         
+        // Carregar tipos de serviço
+        const tiposServicoCarregados = servicosApi.getAll();
+        setTiposServico(tiposServicoCarregados);
+        
         // Carregar agendamentos usando a API
         const agendamentosCarregados = agendamentosApi.getAll();
         setAgendamentos(agendamentosCarregados);
+        
+        console.log('Tipos de serviço carregados:', tiposServicoCarregados);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
         toast.current.show({
@@ -82,6 +92,9 @@ function Agendamento() {
       const tipoServicoChave = 'outro';
       const serviceDuration = (TIPOS_SERVICO[tipoServicoChave] && TIPOS_SERVICO[tipoServicoChave].duration) || 60;
       
+      // Encontrar um serviço padrão para novo agendamento
+      const servicoPadrao = tiposServico.length > 0 ? tiposServico[0] : null;
+      
       setEventForm({
         titulo: '',
         data: `${year}-${month}-${day}`,
@@ -89,7 +102,9 @@ function Agendamento() {
         duracao: serviceDuration,
         descricao: '',
         tipo: tipoServicoChave,
-        clienteId: selectedClientId
+        tipoServicoId: servicoPadrao ? servicoPadrao.id : null,
+        clienteId: selectedClientId,
+        valor: servicoPadrao ? servicoPadrao.valor : 0
       });
       
       setIsNewEvent(true);
@@ -117,6 +132,19 @@ function Agendamento() {
       // Garantir que o tipo seja em minúsculas
       const tipoEvento = (event.extendedProps.tipo || 'outro').toLowerCase();
       
+      // Encontrar o agendamento completo para obter todas as informações
+      const agendamentoCompleto = agendamentos.find(a => a.id === event.id);
+      const tipoServicoId = agendamentoCompleto?.tipoServicoId;
+      
+      // Buscar informação de valor do serviço
+      let valor = 0;
+      if (tipoServicoId) {
+        const servico = tiposServico.find(s => s.id === tipoServicoId);
+        if (servico) {
+          valor = servico.valor || 0;
+        }
+      }
+      
       setEventForm({
         id: event.id,
         titulo: event.title,
@@ -125,7 +153,9 @@ function Agendamento() {
         duracao: durationMinutes,
         descricao: event.extendedProps.descricao || '',
         tipo: tipoEvento,
-        clienteId: clienteId
+        tipoServicoId: tipoServicoId,
+        clienteId: clienteId,
+        valor: valor
       });
       
       setSelectedEvent(event);
@@ -149,7 +179,11 @@ function Agendamento() {
       // Garantir que o tipo seja em minúsculas
       const tipoEvento = (event.extendedProps.tipo || 'outro').toLowerCase();
       
+      // Encontrar o agendamento completo para preservar todas as informações
+      const agendamentoOriginal = agendamentos.find(a => a.id === event.id);
+      
       const updatedEvent = {
+        ...agendamentoOriginal,
         id: event.id,
         titulo: event.title,
         data: `${year}-${month}-${day}`,
@@ -157,7 +191,10 @@ function Agendamento() {
         duracao: durationMinutes,
         descricao: event.extendedProps.descricao || '',
         tipo: tipoEvento,
-        clienteId: event.extendedProps.clienteId || null
+        clienteId: event.extendedProps.clienteId || null,
+        // Preservar o tipoServicoId e valor do agendamento original
+        tipoServicoId: agendamentoOriginal?.tipoServicoId,
+        valor: agendamentoOriginal?.valor
       };
       
       handleEventUpdate(updatedEvent);
@@ -174,10 +211,22 @@ function Agendamento() {
     const handleSubmit = (e) => {
       e.preventDefault();
       
+      // Encontrar o tipo de serviço selecionado para obter o valor
+      let valor = eventForm.valor;
+      if (eventForm.tipoServicoId) {
+        const servico = tiposServico.find(s => s.id === eventForm.tipoServicoId);
+        if (servico) {
+          valor = servico.valor || 0;
+        }
+      }
+      
       const eventData = {
         ...eventForm,
-        clienteId: selectedClientId
+        clienteId: selectedClientId,
+        valor: valor
       };
+      
+      console.log('Dados do evento a serem salvos:', eventData);
       
       if (isNewEvent) {
         const newEvent = {
@@ -207,8 +256,10 @@ function Agendamento() {
         hora: '',
         duracao: 60,
         descricao: '',
-        tipo: 'OUTRO',
-        clienteId: null
+        tipo: 'outro',
+        tipoServicoId: null,
+        clienteId: null,
+        valor: 0
       });
     };
 
@@ -236,14 +287,23 @@ function Agendamento() {
         // Usar a API para adicionar o agendamento
         const agendamentoCriado = agendamentosApi.add(newEvent);
         
+        // Criar lembrete por e-mail para o agendamento
+        const lembreteCriado = criarLembreteParaAgendamento(agendamentoCriado);
+        
         // Atualizar o estado local após criação bem-sucedida
         setAgendamentos(prevAgendamentos => [...prevAgendamentos, agendamentoCriado]);
+        
+        // Mensagem de sucesso com informação sobre lembrete
+        let mensagemDetalhada = 'Agendamento criado com sucesso!';
+        if (lembreteCriado) {
+          mensagemDetalhada += ' Lembrete por e-mail agendado para 24h antes.';
+        }
         
         toast.current.show({ 
           severity: 'success', 
           summary: 'Sucesso', 
-          detail: 'Agendamento criado com sucesso!',
-          life: 3000 
+          detail: mensagemDetalhada,
+          life: 4000 
         });
       } catch (error) {
         console.error('Erro ao criar agendamento:', error);
@@ -262,6 +322,9 @@ function Agendamento() {
         const agendamentoAtualizado = agendamentosApi.update(updatedEvent);
         
         if (agendamentoAtualizado) {
+          // Atualizar lembrete para o agendamento modificado
+          atualizarLembreteAgendamento(updatedEvent);
+          
           // Atualizar o estado local após atualização bem-sucedida
           setAgendamentos(prevAgendamentos => 
             prevAgendamentos.map(agendamento => 
@@ -306,6 +369,9 @@ function Agendamento() {
         const sucesso = agendamentosApi.delete(eventIdToDelete);
         
         if (sucesso) {
+          // Remover lembretes associados ao agendamento
+          removerLembretesAgendamento(eventIdToDelete);
+          
           // Atualizar o estado local após exclusão bem-sucedida
           setAgendamentos((prev) => prev.filter(item => item.id !== eventIdToDelete));
           
@@ -339,7 +405,18 @@ function Agendamento() {
             <Toast ref={toast} position="bottom-right" />
             
             <header className="calendar-header">
-                <h2>Sistema de Agendamentos</h2>
+                <div className="calendar-header-content">
+                    <h2>Sistema de Agendamentos</h2>
+                    <div className="relatorio-link">
+                        <Button
+                            label="Visualizar Gastos"
+                            icon="pi pi-chart-bar"
+                            className="p-button-info p-button-sm"
+                            onClick={() => window.location.href = '/relatorio-gastos'}
+                            tooltip="Visualizar relatório de gastos dos agendamentos"
+                        />
+                    </div>
+                </div>
             </header>
             
             <div className="calendario-avancado-container">
@@ -491,31 +568,48 @@ function Agendamento() {
                     </div>
                     
                     <div className="p-col-12 p-field">
-                        <label htmlFor="tipo">Tipo de Serviço *</label>
+                        <label htmlFor="tipoServicoId">Tipo de Serviço *</label>
                         <Dropdown
-                            id="tipo"
-                            name="tipo"
-                            value={eventForm.tipo}
-                            options={Object.keys(TIPOS_SERVICO).map(tipo => ({ 
-                                label: `${TIPOS_SERVICO[tipo].title} - ${TIPOS_SERVICO[tipo].duration} min`, 
-                                value: tipo 
+                            id="tipoServicoId"
+                            name="tipoServicoId"
+                            value={eventForm.tipoServicoId}
+                            options={tiposServico.map(servico => ({ 
+                                label: `${servico.nome} - ${servico.duracao} min - R$ ${servico.valor.toFixed(2)}`, 
+                                value: servico.id,
+                                servico: servico
                             }))}
                             onChange={(e) => {
-                                const tipoSelecionado = e.value;
-                                const duracaoPadrao = TIPOS_SERVICO[tipoSelecionado]?.duration || 60;
-                                
-                                setEventForm(prev => ({
-                                    ...prev,
-                                    tipo: tipoSelecionado,
-                                    duracao: duracaoPadrao
-                                }));
+                                const servicoSelecionado = tiposServico.find(s => s.id === e.value);
+                                if (servicoSelecionado) {
+                                    const duracaoPadrao = servicoSelecionado.duracao || 60;
+                                    const valorServico = servicoSelecionado.valor || 0;
+                                    const corServico = servicoSelecionado.cor || '673AB7';
+                                    
+                                    setEventForm(prev => ({
+                                        ...prev,
+                                        tipoServicoId: servicoSelecionado.id,
+                                        tipo: servicoSelecionado.id, // Manter compatibilidade
+                                        duracao: duracaoPadrao,
+                                        valor: valorServico
+                                    }));
+                                }
                             }}
                             optionLabel="label"
+                            placeholder="Selecione o tipo de serviço"
                             style={{ 
-                                backgroundColor: TIPOS_SERVICO[eventForm.tipo]?.color || '#673AB7',
+                                backgroundColor: eventForm.tipoServicoId ? 
+                                    `#${tiposServico.find(s => s.id === eventForm.tipoServicoId)?.cor || '673AB7'}` : 
+                                    '#673AB7',
                                 color: '#FFFFFF'
                             }}
                         />
+                        {eventForm.tipoServicoId && (
+                            <div className="servico-info p-mt-2">
+                                <span className="valor-servico">
+                                    Valor: <strong>R$ {(tiposServico.find(s => s.id === eventForm.tipoServicoId)?.valor || 0).toFixed(2)}</strong>
+                                </span>
+                            </div>
+                        )}
                     </div>
                     
                     <div className="p-col-12 p-field">
