@@ -30,3 +30,19 @@ export async function criarUsuario(userData) {
 
   return response.json();
 }
+
+export async function excluirUsuario(userId) {
+  const response = await fetch(`${API_URL}/User/${userId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw errorData;
+  }
+
+  return true;
+}

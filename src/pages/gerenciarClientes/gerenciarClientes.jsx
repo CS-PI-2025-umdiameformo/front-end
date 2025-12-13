@@ -12,6 +12,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Divider } from 'primereact/divider';
 import { Tag } from 'primereact/tag';
 import { clientesApi, agendamentosApi } from '../../utils/localStorageApi';
+import { excluirUsuario } from '../../utils/api';
 import './gerenciarClientes.css';
 
 const GerenciarClientes = () => {
@@ -24,6 +25,7 @@ const GerenciarClientes = () => {
   const [erros, setErros] = useState({});
   const [clienteEmUso, setClienteEmUso] = useState(false);
   const [agendamentosCliente, setAgendamentosCliente] = useState([]);
+  const [quantidadeAgendamentos, setQuantidadeAgendamentos] = useState(0);
   const [filtros, setFiltros] = useState({
     global: '',
     campo: 'nome'
@@ -235,20 +237,15 @@ const GerenciarClientes = () => {
     }
   };
 
-  const excluirCliente = () => {
-    // Verificar novamente se o cliente está sendo usado
-    if (verificarClienteEmUso(clienteSelecionado.id)) {
-      setClienteEmUso(true);
-      setConfirmaExclusaoVisivel(false);
-      return;
-    }
-    
-    // Usar nossa API para excluir o cliente
-    if (clientesApi.delete(clienteSelecionado.id)) {
+  const excluirCliente = async () => {
+    try {
+      await excluirUsuario(clienteSelecionado.id);
+      
       // Atualizar estado local após excluir
       const clientesAtualizados = clientes.filter(c => c.id !== clienteSelecionado.id);
       setClientes(clientesAtualizados);
       setConfirmaExclusaoVisivel(false);
+      setClienteSelecionado(null);
       
       toast.current.show({
         severity: 'success',
@@ -256,22 +253,37 @@ const GerenciarClientes = () => {
         detail: 'Cliente excluído com sucesso',
         life: 3000
       });
-    } else {
-      toast.current.show({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Falha ao excluir cliente',
-        life: 3000
-      });
+    } catch (error) {
+      if (error.bloqueado) {
+        setQuantidadeAgendamentos(error.quantidadeAgendamentos || 0);
+        setAgendamentosCliente([]);
+        setClienteEmUso(true);
+        setConfirmaExclusaoVisivel(false);
+        
+        toast.current.show({
+          severity: 'warn',
+          summary: 'Exclusão Bloqueada',
+          detail: error.mensagem || 'Cliente possui agendamentos associados',
+          life: 4000
+        });
+      } else {
+        toast.current.show({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Falha ao excluir cliente',
+          life: 3000
+        });
+        setConfirmaExclusaoVisivel(false);
+        setClienteSelecionado(null);
+      }
     }
-    
-    setClienteSelecionado(null);
   };
 
   const fecharDialogClienteEmUso = () => {
     setClienteEmUso(false);
     setClienteSelecionado(null);
     setAgendamentosCliente([]);
+    setQuantidadeAgendamentos(0);
   };
 
   const salvarCliente = () => {
@@ -795,9 +807,9 @@ const GerenciarClientes = () => {
                 Para excluir este cliente, primeiro você deve excluir ou modificar os 
                 agendamentos associados a ele.
               </p>
-              {agendamentosCliente.length > 0 && (
+              {quantidadeAgendamentos > 0 && (
                 <p className="agendamentos-count">
-                  Este cliente tem <b>{agendamentosCliente.length}</b> agendamento(s).
+                  Este cliente tem <b>{quantidadeAgendamentos}</b> agendamento(s).
                 </p>
               )}
             </div>
