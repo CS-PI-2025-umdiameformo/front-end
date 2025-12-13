@@ -124,6 +124,8 @@ button:disabled {
 .form-input.input-error,
 .form-input[aria-invalid="true"] {
   border-color: var(--danger-color);
+  background-color: #fff5f5;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
 }
 
 .form-button {
@@ -136,4 +138,8 @@ button:disabled {
 
 .error-message {
   color: var(--danger-color);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
