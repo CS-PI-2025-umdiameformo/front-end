@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { criarUsuario } from '../../utils/api';
 import './cadastroUsuario.css';
 
 const LOCAL_STORAGE_KEY = 'userLastRegistrationFormData';
@@ -117,30 +118,44 @@ function UserRegistrationPage() {
   /**
    * @function handleSubmit
    * @description Lida com a submissão do formulário.
-   * Valida os dados e, se válidos, simula o envio dos dados e limpa o localStorage.
+   * Valida os dados e, se válidos, envia para a API.
    * @param {object} e - O evento de submissão do formulário.
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-      console.log('Dados do formulário enviados:', formData);
-      setErrors({});
-      setIsSubmitted(true);
-      alert('Usuário cadastrado com sucesso! (Simulação)');
+      try {
+        await criarUsuario(formData);
+        
+        setErrors({});
+        setIsSubmitted(true);
+        alert('Usuário cadastrado com sucesso!');
 
-      // Limpar o formulário e o localStorage após o envio
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
+        // Limpar o formulário e o localStorage após o envio
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
 
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
+        setFormData({
+          name: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        });
 
-      // Redireciona para a página de login
-      navigate("/login");
+        // Redireciona para a página de login
+        navigate("/login");
+      } catch (error) {
+        // Trata erro de duplicidade retornado pela API
+        if (error.duplicado) {
+          const campo = error.campo.toLowerCase();
+          setErrors({
+            [campo]: error.mensagem
+          });
+        } else {
+          alert('Erro ao cadastrar usuário. Tente novamente.');
+        }
+        setIsSubmitted(false);
+      }
     } else {
       setErrors(formErrors);
       setIsSubmitted(false);
