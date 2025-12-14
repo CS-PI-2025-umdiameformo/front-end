@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { criarUsuario } from '../../utils/api';
 import './cadastroUsuario.css';
 
 const LOCAL_STORAGE_KEY = 'userLastRegistrationFormData';
@@ -15,6 +16,8 @@ function UserRegistrationPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    cpf: '',
+    telefone: '',
     password: '',
     confirmPassword: '',
   });
@@ -117,30 +120,55 @@ function UserRegistrationPage() {
   /**
    * @function handleSubmit
    * @description Lida com a submissão do formulário.
-   * Valida os dados e, se válidos, simula o envio dos dados e limpa o localStorage.
+   * Valida os dados e, se válidos, envia para a API.
    * @param {object} e - O evento de submissão do formulário.
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-      console.log('Dados do formulário enviados:', formData);
-      setErrors({});
-      setIsSubmitted(true);
-      alert('Usuário cadastrado com sucesso! (Simulação)');
+      try {
+        await criarUsuario(formData);
+        
+        setErrors({});
+        setIsSubmitted(true);
+        alert('Usuário cadastrado com sucesso!');
 
-      // Limpar o formulário e o localStorage após o envio
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
+        // Limpar o formulário e o localStorage após o envio
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
 
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
+        setFormData({
+          name: '',
+          email: '',
+          cpf: '',
+          telefone: '',
+          password: '',
+          confirmPassword: '',
+        });
 
-      // Redireciona para a página de login
-      navigate("/login");
+        // Redireciona para a página de login
+        navigate("/login");
+      } catch (error) {
+        // Trata erro de duplicidade retornado pela API
+        if (error.duplicado) {
+          // Mapeia o campo retornado pela API para o nome do input no formulário
+          const campoMap = {
+            'email': 'email',
+            'cpf': 'cpf',
+            'telefone': 'telefone'
+          };
+          
+          const campo = error.campo.toLowerCase();
+          const campoFormulario = campoMap[campo] || campo;
+          
+          setErrors({
+            [campoFormulario]: error.mensagem
+          });
+        } else {
+          alert('Erro ao cadastrar usuário. Tente novamente.');
+        }
+        setIsSubmitted(false);
+      }
     } else {
       setErrors(formErrors);
       setIsSubmitted(false);
@@ -185,6 +213,38 @@ function UserRegistrationPage() {
               aria-describedby={errors.email ? "email-error" : undefined}
             />
             {errors.email && <p id="email-error" className="error-message">{errors.email}</p>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="cpf" className="form-label">CPF:</label>
+            <input
+              type="text"
+              id="cpf"
+              name="cpf"
+              className={`form-input ${errors.cpf ? 'input-error' : ''}`}
+              value={formData.cpf}
+              onChange={handleChange}
+              placeholder="000.000.000-00"
+              aria-invalid={!!errors.cpf}
+              aria-describedby={errors.cpf ? "cpf-error" : undefined}
+            />
+            {errors.cpf && <p id="cpf-error" className="error-message">{errors.cpf}</p>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="telefone" className="form-label">Telefone:</label>
+            <input
+              type="tel"
+              id="telefone"
+              name="telefone"
+              className={`form-input ${errors.telefone ? 'input-error' : ''}`}
+              value={formData.telefone}
+              onChange={handleChange}
+              placeholder="(00) 00000-0000"
+              aria-invalid={!!errors.telefone}
+              aria-describedby={errors.telefone ? "telefone-error" : undefined}
+            />
+            {errors.telefone && <p id="telefone-error" className="error-message">{errors.telefone}</p>}
           </div>
 
           <div className="form-group">
