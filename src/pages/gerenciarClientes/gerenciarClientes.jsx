@@ -522,7 +522,10 @@ const GerenciarClientes = () => {
         label="Não" 
         icon="pi pi-times" 
         className="p-button-text" 
-        onClick={() => setConfirmaExclusaoVisivel(false)} 
+        onClick={() => {
+          setConfirmaExclusaoVisivel(false);
+          setClienteSelecionado(null);
+        }} 
       />
       <Button 
         label="Sim" 
@@ -774,7 +777,10 @@ const GerenciarClientes = () => {
         header="Confirmar Exclusão"
         modal
         footer={excluirDialogFooter}
-        onHide={() => setConfirmaExclusaoVisivel(false)}
+        onHide={() => {
+          setConfirmaExclusaoVisivel(false);
+          setClienteSelecionado(null);
+        }}
       >
         <div className="confirmation-content">
           <i className="pi pi-exclamation-triangle p-mr-3" style={{ fontSize: '2rem', color: '#ff9800' }} />
