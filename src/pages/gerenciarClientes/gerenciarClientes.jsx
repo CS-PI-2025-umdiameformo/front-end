@@ -801,17 +801,11 @@ const GerenciarClientes = () => {
             <div>
               <p>
                 O cliente <b>{clienteSelecionado.nome}</b> não pode ser excluído porque 
-                está associado a agendamentos existentes.
+                possui <b>{quantidadeAgendamentos}</b> agendamento{quantidadeAgendamentos !== 1 ? 's' : ''} associado{quantidadeAgendamentos !== 1 ? 's' : ''}.
               </p>
               <p>
-                Para excluir este cliente, primeiro você deve excluir ou modificar os 
-                agendamentos associados a ele.
+                Para excluir este cliente, é necessário primeiro remover ou reatribuir os agendamentos.
               </p>
-              {quantidadeAgendamentos > 0 && (
-                <p className="agendamentos-count">
-                  Este cliente tem <b>{quantidadeAgendamentos}</b> agendamento(s).
-                </p>
-              )}
             </div>
           )}
         </div>
